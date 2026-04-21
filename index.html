@@ -1,11 +1,739 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>welcome !</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>恋爱对象分析工具 - 理性伴侣筛选助手</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+	<link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<script>
+		tailwind.config = { theme: { extend: { colors: { primary: '#3b82f6', success: '#10b981', warning: '#f59e0b', danger: '#ef4444' } } } };
+	</script>
+	<style>
+		@layer utilities {
+			.step-active { background-color: #3b82f6; color: white; border-color: #3b82f6; }
+			.step-completed { background-color: #10b981; color: white; border-color: #10b981; }
+			.step-pending { background-color: white; color: #6b7280; border-color: #e5e7eb; }
+			.option-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+			.option-card-selected { border-color: #3b82f6; background-color: #eff6ff; }
+			.input-field { width: 100%; padding: 12px 16px; border: 1px solid #d1d5db; border-radius: 8px; }
+			.input-field:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.2); }
+		}
+	</style>
 </head>
-<body>
-<h3>this is mmxiutu.com home page</h3>
+<body class="bg-gray-50 min-h-screen">
+<div class="container mx-auto px-4 py-8 max-w-4xl">
+
+    <!-- 标题 + 进度条（保持简洁） -->
+    <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-800">❤️ 恋爱对象分析工具</h1>
+        <p class="text-gray-600">基于理性判断的伴侣选择助手</p>
+    </div>
+
+    <div class="flex justify-between mb-10 relative">
+        <div class="absolute top-1/2 left-0 right-0 h-1 bg-gray-200 -translate-y-1/2 z-0 rounded-full"></div>
+        <div id="progress-bar" class="absolute top-1/2 left-0 h-1 bg-primary -translate-y-1/2 z-0 transition-all duration-500 rounded-full" style="width:0%"></div>
+        <div class="flex flex-col items-center relative z-10"><div id="step-1-circle" class="w-10 h-10 rounded-full border-2 flex items-center justify-center step-active">1</div><span class="text-sm mt-1">基本信息</span></div>
+        <div class="flex flex-col items-center relative z-10"><div id="step-2-circle" class="w-10 h-10 rounded-full border-2 flex items-center justify-center step-pending">2</div><span class="text-sm mt-1">性格与行为</span></div>
+        <div class="flex flex-col items-center relative z-10"><div id="step-3-circle" class="w-10 h-10 rounded-full border-2 flex items-center justify-center step-pending">3</div><span class="text-sm mt-1">价值观与生活</span></div>
+        <div class="flex flex-col items-center relative z-10"><div id="step-4-circle" class="w-10 h-10 rounded-full border-2 flex items-center justify-center step-pending">4</div><span class="text-sm mt-1">关系与互动</span></div>
+        <div class="flex flex-col items-center relative z-10"><div id="step-5-circle" class="w-10 h-10 rounded-full border-2 flex items-center justify-center step-pending">5</div><span class="text-sm mt-1">分析结果</span></div>
+    </div>
+
+    <div class="bg-white rounded-3xl shadow-2xl p-8">
+            <!-- 步骤1：基本信息（最终优化版） -->
+            <div id="step-1" class="step-content">
+                <h2 class="text-3xl font-bold mb-6 text-gray-800">1. 基本信息</h2>
+                <p class="text-gray-600 mb-8">请填写对方的基本信息，帮助我们进行初步分析。</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <!-- 年龄改为年龄段 select -->
+                    <div>
+                        <label class="block text-gray-700 mb-2 font-medium">年龄段 <span class="text-red-500">*</span></label>
+                        <select id="age" class="input-field">
+                            <option value="">请选择年龄段</option>
+                            <option value="18-22">18-22岁</option>
+                            <option value="23-26">23-26岁</option>
+                            <option value="27-30">27-30岁</option>
+                            <option value="31-35">31-35岁</option>
+                            <option value="36-40">36-40岁</option>
+                            <option value="41-45">41-45岁</option>
+                            <option value="46+">46岁以上</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 mb-2 font-medium">教育背景 <span class="text-red-500">*</span></label>
+                        <select id="education" class="input-field">
+                            <option value="">请选择</option>
+                            <option value="primary">小学及以下</option>
+                            <option value="middle">初中</option>
+                            <option value="high">高中/中专</option>
+                            <option value="college">大专</option>
+                            <option value="bachelor">本科</option>
+                            <option value="master">硕士</option>
+                            <option value="phd">博士及以上</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 mb-2 font-medium">职业 <span class="text-red-500">*</span></label>
+                        <select id="occupation" class="input-field">
+                            <option value="">请选择</option>
+                            <option value="student">学生</option>
+                            <option value="office">办公室职员</option>
+                            <option value="tech">技术/IT行业</option>
+                            <option value="hostess">娱乐场所工作者（如酒吧/KTV陪侍）</option>
+                            <option value="internet_celebrity">网红/主播</option>
+                            <option value="unemployed">无业/待业</option>
+                            <option value="other">其他</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 mb-2 font-medium">月收入范围（元）</label>
+                        <select id="income" class="input-field">
+                            <option value="">请选择</option>
+                            <option value="0">无收入</option>
+                            <option value="3000">3000以下</option>
+                            <option value="5000">3000-5000</option>
+                            <option value="8000">5000-8000</option>
+                            <option value="12000">8000-12000</option>
+                            <option value="20000">12000-20000</option>
+                            <option value="30000">20000-30000</option>
+                            <option value="50000">30000-50000</option>
+                            <option value="100000">50000以上</option>
+                        </select>
+                    </div>
+                </div>
+            
+                <!-- 家庭背景（单选卡片） -->
+                <div class="mb-8">
+                    <label class="block text-gray-700 mb-3 font-medium">家庭背景 <span class="text-red-500">*</span></label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="group-family_background">
+                        <div class="option-card flex items-center p-4 border rounded-xl cursor-pointer" data-name="family_background">
+                            <input type="radio" id="family_complete" name="family_background" value="family_complete" class="mr-3 w-5 h-5">
+                            <label for="family_complete" class="cursor-pointer flex-1">家庭完整，父母关系良好</label>
+                        </div>
+                        <div class="option-card flex items-center p-4 border rounded-xl cursor-pointer" data-name="family_background">
+                            <input type="radio" id="family_divorced" name="family_background" value="family_divorced" class="mr-3 w-5 h-5">
+                            <label for="family_divorced" class="cursor-pointer flex-1">父母离异/单亲家庭</label>
+                        </div>
+                        <div class="option-card flex items-center p-4 border rounded-xl cursor-pointer" data-name="family_background">
+                            <input type="radio" id="family_conflict" name="family_background" value="family_conflict" class="mr-3 w-5 h-5">
+                            <label for="family_conflict" class="cursor-pointer flex-1">家庭关系紧张/常有冲突</label>
+                        </div>
+                        <div class="option-card flex items-center p-4 border rounded-xl cursor-pointer" data-name="family_background">
+                            <input type="radio" id="family_poor" name="family_background" value="family_poor" class="mr-3 w-5 h-5">
+                            <label for="family_poor" class="cursor-pointer flex-1">家庭经济条件较差</label>
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- 颜值滑块 -->
+                <div class="mb-8">
+                    <label class="block text-gray-700 mb-3 font-medium">颜值水平（客观评价）</label>
+                    <div class="flex items-center gap-4">
+                        <input type="range" id="appearance" min="1" max="10" value="5" class="w-full accent-blue-500">
+                        <span id="appearance-value" class="font-semibold w-8 text-center text-lg">5</span>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>普通</span><span>中等</span><span>出众</span>
+                    </div>
+                </div>
+            
+                <div class="flex justify-end mt-8">
+                    <button onclick="nextStep(1)" class="btn-primary px-10 py-3 text-lg">下一步 →</button>
+                </div>
+            </div>
+
+            <!-- 步骤2：性格与行为 -->
+            <div id="step-2" class="step-content hidden">
+                <h2 class="text-3xl font-bold mb-6 text-gray-800">2. 性格与行为</h2>
+                <p class="text-gray-600 mb-8">请根据您的观察，选择最符合对方的情况（单选为主）</p>
+                
+                <div class="mb-8">
+                    <label class="block text-gray-700 mb-3 font-medium">情绪稳定性 <span class="text-red-500">*</span></label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="group-emotional_stability">
+                        <div class="option-card flex items-center p-4 border rounded-xl cursor-pointer" data-name="emotional_stability">
+                            <input type="radio" id="emotion_stable" name="emotional_stability" value="emotion_stable" class="mr-3 w-5 h-5">
+                            <label for="emotion_stable" class="cursor-pointer flex-1">情绪稳定，很少发脾气</label>
+                        </div>
+                        <div class="option-card flex items-center p-4 border rounded-xl cursor-pointer" data-name="emotional_stability">
+                            <input type="radio" id="emotion_unstable" name="emotional_stability" value="emotion_unstable" class="mr-3 w-5 h-5">
+                            <label for="emotion_unstable" class="cursor-pointer flex-1">情绪波动大，容易发脾气</label>
+                        </div>
+                        <div class="option-card flex items-center p-4 border rounded-xl cursor-pointer" data-name="emotional_stability">
+                            <input type="radio" id="emotion_negative" name="emotional_stability" value="emotion_negative" class="mr-3 w-5 h-5">
+                            <label for="emotion_negative" class="cursor-pointer flex-1">经常抱怨，传递负能量</label>
+                        </div>
+                        <div class="option-card flex items-center p-4 border rounded-xl cursor-pointer" data-name="emotional_stability">
+                            <input type="radio" id="emotion_violent" name="emotional_stability" value="emotion_violent" class="mr-3 w-5 h-5">
+                            <label for="emotion_violent" class="cursor-pointer flex-1">有暴力倾向或行为</label>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="mb-8">
+                    <label class="block text-gray-700 mb-3 font-medium">沟通方式 <span class="text-red-500">*</span></label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="group-communication">
+                        <div class="option-card flex items-center p-4 border rounded-xl cursor-pointer" data-name="communication">
+                            <input type="radio" id="comm_open" name="communication" value="comm_open" class="mr-3 w-5 h-5">
+                            <label for="comm_open" class="cursor-pointer flex-1">开放坦诚，愿意分享想法</label>
+                        </div>
+                        <div class="option-card flex items-center p-4 border rounded-xl cursor-pointer" data-name="communication">
+                            <input type="radio" id="comm_passive" name="communication" value="comm_passive" class="mr-3 w-5 h-5">
+                            <label for="comm_passive" class="cursor-pointer flex-1">被动，很少主动交流</label>
+                        </div>
+                        <div class="option-card flex items-center p-4 border rounded-xl cursor-pointer" data-name="communication">
+                            <input type="radio" id="comm_aggressive" name="communication" value="comm_aggressive" class="mr-3 w-5 h-5">
+                            <label for="comm_aggressive" class="cursor-pointer flex-1">强势，喜欢主导对话</label>
+                        </div>
+                        <div class="option-card flex items-center p-4 border rounded-xl cursor-pointer" data-name="communication">
+                            <input type="radio" id="comm_manipulative" name="communication" value="comm_manipulative" class="mr-3 w-5 h-5">
+                            <label for="comm_manipulative" class="cursor-pointer flex-1">喜欢操控或利用他人</label>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="mb-8">
+                    <label class="block text-gray-700 mb-3 font-medium">认知能力与学习意愿 <span class="text-red-500">*</span></label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="group-cognitive_ability">
+                        <div class="option-card flex items-center p-4 border rounded-xl cursor-pointer" data-name="cognitive_ability">
+                            <input type="radio" id="cognition_high" name="cognitive_ability" value="cognition_high" class="mr-3 w-5 h-5">
+                            <label for="cognition_high" class="cursor-pointer flex-1">认知能力强，愿意学习新事物</label>
+                        </div>
+                        <div class="option-card flex items-center p-4 border rounded-xl cursor-pointer" data-name="cognitive_ability">
+                            <input type="radio" id="cognition_low" name="cognitive_ability" value="cognition_low" class="mr-3 w-5 h-5">
+                            <label for="cognition_low" class="cursor-pointer flex-1">认知能力有限，难以理解复杂问题</label>
+                        </div>
+                        <div class="option-card flex items-center p-4 border rounded-xl cursor-pointer" data-name="cognitive_ability">
+                            <input type="radio" id="cognition_stubborn" name="cognitive_ability" value="cognition_stubborn" class="mr-3 w-5 h-5">
+                            <label for="cognition_stubborn" class="cursor-pointer flex-1">固执己见，不愿意接受新观点</label>
+                        </div>
+                        <div class="option-card flex items-center p-4 border rounded-xl cursor-pointer" data-name="cognitive_ability">
+                            <input type="radio" id="cognition_shallow" name="cognitive_ability" value="cognition_shallow" class="mr-3 w-5 h-5">
+                            <label for="cognition_shallow" class="cursor-pointer flex-1">思想浅薄，只关注表面事物</label>
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- 特殊行为（可多选，保持不变） -->
+                <div class="mb-8">
+                    <label class="block text-gray-700 mb-3 font-medium">是否有以下特殊行为或癖好？（可多选）</label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="option-card" data-value="addiction_gambling"><input type="checkbox" id="addiction_gambling" name="special_behavior" class="mr-3"><label for="addiction_gambling" class="cursor-pointer">赌博成瘾</label></div>
+                        <div class="option-card" data-value="addiction_drug"><input type="checkbox" id="addiction_drug" name="special_behavior" class="mr-3"><label for="addiction_drug" class="cursor-pointer">吸毒/药物滥用</label></div>
+                        <div class="option-card" data-value="addiction_alcohol"><input type="checkbox" id="addiction_alcohol" name="special_behavior" class="mr-3"><label for="addiction_alcohol" class="cursor-pointer">酗酒</label></div>
+                        <div class="option-card" data-value="addiction_internet"><input type="checkbox" id="addiction_internet" name="special_behavior" class="mr-3"><label for="addiction_internet" class="cursor-pointer">网络/游戏成瘾</label></div>
+                        <div class="option-card" data-value="mental_issue"><input type="checkbox" id="mental_issue" name="special_behavior" class="mr-3"><label for="mental_issue" class="cursor-pointer">有精神疾病史或症状</label></div>
+                        <div class="option-card" data-value="criminal_record"><input type="checkbox" id="criminal_record" name="special_behavior" class="mr-3"><label for="criminal_record" class="cursor-pointer">有犯罪记录</label></div>
+                    </div>
+                </div>
+            
+                <div class="flex justify-between mt-10">
+                    <button onclick="showStep(1)" class="btn-secondary">← 上一步</button>
+                    <button onclick="nextStep(2)" class="btn-primary">下一步 →</button>
+                </div>
+            </div>
+			
+			<!-- 步骤3：价值观与生活 -->
+			<div id="step-3" class="step-content hidden">
+			    <h2 class="text-3xl font-bold mb-6 text-gray-800">3. 价值观与生活</h2>
+			    <p class="text-gray-600 mb-8">请根据对方的价值观和生活方式进行选择</p>
+			
+			    <div class="mb-8">
+			        <label class="block text-gray-700 mb-3 font-medium">金钱观 <span class="text-red-500">*</span></label>
+			        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+			            <div class="option-card" data-value="money_thrifty"><input type="radio" id="money_thrifty" name="money_view" class="mr-3"><label for="money_thrifty" class="cursor-pointer">节俭，理性消费</label></div>
+			            <div class="option-card" data-value="money_moderate"><input type="radio" id="money_moderate" name="money_view" class="mr-3"><label for="money_moderate" class="cursor-pointer">适度消费，量入为出</label></div>
+			            <div class="option-card" data-value="money_extravagant"><input type="radio" id="money_extravagant" name="money_view" class="mr-3"><label for="money_extravagant" class="cursor-pointer">消费大手大脚，超出收入水平</label></div>
+			            <div class="option-card" data-value="money_materialistic"><input type="radio" id="money_materialistic" name="money_view" class="mr-3"><label for="money_materialistic" class="cursor-pointer">非常物质主义，看重金钱和物质</label></div>
+			        </div>
+			    </div>
+			
+			    <div class="mb-8">
+			        <label class="block text-gray-700 mb-3 font-medium">对感情和婚姻的态度 <span class="text-red-500">*</span></label>
+			        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+			            <div class="option-card" data-value="relationship_serious"><input type="radio" id="relationship_serious" name="relationship_attitude" class="mr-3"><label for="relationship_serious" class="cursor-pointer">认真对待感情，渴望稳定婚姻</label></div>
+			            <div class="option-card" data-value="relationship_casual"><input type="radio" id="relationship_casual" name="relationship_attitude" class="mr-3"><label for="relationship_casual" class="cursor-pointer">对感情较为随意，不想过早结婚</label></div>
+			            <div class="option-card" data-value="relationship_material"><input type="radio" id="relationship_material" name="relationship_attitude" class="mr-3"><label for="relationship_material" class="cursor-pointer">将感情和婚姻视为改变经济状况的手段</label></div>
+			            <div class="option-card" data-value="relationship_experience"><input type="radio" id="relationship_experience" name="relationship_attitude" class="mr-3"><label for="relationship_experience" class="cursor-pointer">认为应该多谈几次恋爱再结婚</label></div>
+			        </div>
+			    </div>
+			
+			    <div class="mb-8">
+			        <label class="block text-gray-700 mb-3 font-medium">恋爱史 <span class="text-red-500">*</span></label>
+			        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+			            <div class="option-card" data-value="love_none"><input type="radio" id="love_none" name="love_history" class="mr-3"><label for="love_none" class="cursor-pointer">无恋爱经验</label></div>
+			            <div class="option-card" data-value="love_1_2"><input type="radio" id="love_1_2" name="love_history" class="mr-3"><label for="love_1_2" class="cursor-pointer">1-2段恋爱经历</label></div>
+			            <div class="option-card" data-value="love_3_5"><input type="radio" id="love_3_5" name="love_history" class="mr-3"><label for="love_3_5" class="cursor-pointer">3-5段恋爱经历</label></div>
+			            <div class="option-card" data-value="love_many"><input type="radio" id="love_many" name="love_history" class="mr-3"><label for="love_many" class="cursor-pointer">5段以上恋爱经历</label></div>
+			        </div>
+			    </div>
+			
+			    <div class="mb-8">
+			        <label class="block text-gray-700 mb-3 font-medium">是否有以下情况？（可多选）</label>
+			        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+			            <div class="option-card" data-value="cheating_past"><input type="checkbox" id="cheating_past" name="special_situation" class="mr-3"><label for="cheating_past" class="cursor-pointer">曾在恋爱中出轨（过墙女）</label></div>
+			            <div class="option-card" data-value="multiple_relationship"><input type="checkbox" id="multiple_relationship" name="special_situation" class="mr-3"><label for="multiple_relationship" class="cursor-pointer">同时与多人保持恋爱关系</label></div>
+			            <div class="option-card" data-value="money_dependent"><input type="checkbox" id="money_dependent" name="special_situation" class="mr-3"><label for="money_dependent" class="cursor-pointer">经济上完全依赖他人</label></div>
+			            <div class="option-card" data-value="financial_burden"><input type="checkbox" id="financial_burden" name="special_situation" class="mr-3"><label for="financial_burden" class="cursor-pointer">有大量债务或经济负担</label></div>
+			            <div class="option-card" data-value="family_dependent"><input type="checkbox" id="family_dependent" name="special_situation" class="mr-3"><label for="family_dependent" class="cursor-pointer">过度依赖原生家庭</label></div>
+			            <div class="option-card" data-value="family_burden"><input type="checkbox" id="family_burden" name="special_situation" class="mr-3"><label for="family_burden" class="cursor-pointer">家庭负担较重（需资助家人）</label></div>
+			        </div>
+			    </div>
+			
+			    <div class="mb-8">
+			        <label class="block text-gray-700 mb-3 font-medium">生活习惯 <span class="text-red-500">*</span></label>
+			        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+			            <div class="option-card" data-value="life_orderly"><input type="radio" id="life_orderly" name="life_habit" class="mr-3"><label for="life_orderly" class="cursor-pointer">生活规律，注重健康</label></div>
+			            <div class="option-card" data-value="life_moderate"><input type="radio" id="life_moderate" name="life_habit" class="mr-3"><label for="life_moderate" class="cursor-pointer">生活习惯一般，偶尔熬夜</label></div>
+			            <div class="option-card" data-value="life_irregular"><input type="radio" id="life_irregular" name="life_habit" class="mr-3"><label for="life_irregular" class="cursor-pointer">生活不规律，经常熬夜</label></div>
+			            <div class="option-card" data-value="life_party"><input type="radio" id="life_party" name="life_habit" class="mr-3"><label for="life_party" class="cursor-pointer">经常参加派对，社交活动频繁</label></div>
+			        </div>
+			    </div>
+			
+			    <div class="flex justify-between mt-10">
+			        <button onclick="showStep(2)" class="btn-secondary">← 上一步</button>
+			        <button onclick="nextStep(3)" class="btn-primary">下一步 →</button>
+			    </div>
+			</div>
+
+			<!-- 步骤4：关系与互动 -->
+			<div id="step-4" class="step-content hidden">
+			    <h2 class="text-3xl font-bold mb-6 text-gray-800">4. 关系与互动</h2>
+			    <p class="text-gray-600 mb-8">请根据你们之间的实际互动情况选择</p>
+			
+			    <div class="mb-8">
+			        <label class="block text-gray-700 mb-3 font-medium">在关系中的角色定位 <span class="text-red-500">*</span></label>
+			        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+			            <div class="option-card" data-value="role_equal"><input type="radio" id="role_equal" name="relationship_role" class="mr-3"><label for="role_equal" class="cursor-pointer">平等互助，共同成长</label></div>
+			            <div class="option-card" data-value="role_dependent"><input type="radio" id="role_dependent" name="relationship_role" class="mr-3"><label for="role_dependent" class="cursor-pointer">她较为依赖你，小鸟依人</label></div>
+			            <div class="option-card" data-value="role_dominant"><input type="radio" id="role_dominant" name="relationship_role" class="mr-3"><label for="role_dominant" class="cursor-pointer">她较为强势，喜欢主导关系</label></div>
+			            <div class="option-card" data-value="role_exploitative"><input type="radio" id="role_exploitative" name="relationship_role" class="mr-3"><label for="role_exploitative" class="cursor-pointer">感觉她在利用你（金钱/资源/地位）</label></div>
+			        </div>
+			    </div>
+			
+			    <div class="mb-8">
+			        <label class="block text-gray-700 mb-3 font-medium">她对你的态度 <span class="text-red-500">*</span></label>
+			        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+			            <div class="option-card" data-value="attitude_caring"><input type="radio" id="attitude_caring" name="attitude_towards" class="mr-3"><label for="attitude_caring" class="cursor-pointer">关心你，尊重你的感受</label></div>
+			            <div class="option-card" data-value="attitude_selfish"><input type="radio" id="attitude_selfish" name="attitude_towards" class="mr-3"><label for="attitude_selfish" class="cursor-pointer">较为自我，很少考虑你的需求</label></div>
+			            <div class="option-card" data-value="attitude_critical"><input type="radio" id="attitude_critical" name="attitude_towards" class="mr-3"><label for="attitude_critical" class="cursor-pointer">经常批评你，很少给予肯定</label></div>
+			            <div class="option-card" data-value="attitude_conditional"><input type="radio" id="attitude_conditional" name="attitude_towards" class="mr-3"><label for="attitude_conditional" class="cursor-pointer">对你的好是有条件的</label></div>
+			        </div>
+			    </div>
+			
+			    <div class="mb-8">
+			        <label class="block text-gray-700 mb-3 font-medium">她的社交圈 <span class="text-red-500">*</span></label>
+			        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+			            <div class="option-card" data-value="social_normal"><input type="radio" id="social_normal" name="social_circle" class="mr-3"><label for="social_normal" class="cursor-pointer">社交圈正常，朋友关系健康</label></div>
+			            <div class="option-card" data-value="social_mixed"><input type="radio" id="social_mixed" name="social_circle" class="mr-3"><label for="social_mixed" class="cursor-pointer">社交圈复杂，有不良朋友</label></div>
+			            <div class="option-card" data-value="social_male"><input type="radio" id="social_male" name="social_circle" class="mr-3"><label for="social_male" class="cursor-pointer">男性朋友特别多，关系暧昧</label></div>
+			            <div class="option-card" data-value="social_secluded"><input type="radio" id="social_secluded" name="social_circle" class="mr-3"><label for="social_secluded" class="cursor-pointer">社交圈很小，几乎没有朋友</label></div>
+			        </div>
+			    </div>
+			
+			    <div class="mb-8">
+			        <label class="block text-gray-700 mb-3 font-medium">她对未来的规划 <span class="text-red-500">*</span></label>
+			        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+			            <div class="option-card" data-value="future_clear"><input type="radio" id="future_clear" name="future_planning" class="mr-3"><label for="future_clear" class="cursor-pointer">有明确的人生规划，包括婚姻</label></div>
+			            <div class="option-card" data-value="future_vague"><input type="radio" id="future_vague" name="future_planning" class="mr-3"><label for="future_vague" class="cursor-pointer">对未来没有明确规划</label></div>
+			            <div class="option-card" data-value="future_career"><input type="radio" id="future_career" name="future_planning" class="mr-3"><label for="future_career" class="cursor-pointer">以事业为重，暂时不考虑婚姻</label></div>
+			            <div class="option-card" data-value="future_material"><input type="radio" id="future_material" name="future_planning" class="mr-3"><label for="future_material" class="cursor-pointer">将物质条件作为未来规划的首要考虑</label></div>
+			        </div>
+			    </div>
+			
+			    <div class="mb-8">
+			        <label class="block text-gray-700 mb-3 font-medium">你们之间的关系进展 <span class="text-red-500">*</span></label>
+			        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+			            <div class="option-card" data-value="progress_slow"><input type="radio" id="progress_slow" name="relationship_progress" class="mr-3"><label for="progress_slow" class="cursor-pointer">进展缓慢，互相了解中</label></div>
+			            <div class="option-card" data-value="progress_moderate"><input type="radio" id="progress_moderate" name="relationship_progress" class="mr-3"><label for="progress_moderate" class="cursor-pointer">进展适中，关系稳定发展</label></div>
+			            <div class="option-card" data-value="progress_fast"><input type="radio" id="progress_fast" name="relationship_progress" class="mr-3"><label for="progress_fast" class="cursor-pointer">进展迅速，很快就确定关系</label></div>
+			            <div class="option-card" data-value="progress_physical"><input type="radio" id="progress_physical" name="relationship_progress" class="mr-3"><label for="progress_physical" class="cursor-pointer">关系主要建立在身体吸引上</label></div>
+			        </div>
+			    </div>
+			
+			    <div class="flex justify-between mt-10">
+			        <button onclick="showStep(3)" class="btn-secondary">← 上一步</button>
+			        <button onclick="goToResult()" class="btn-primary">查看分析结果</button>
+			    </div>
+			</div>
+
+            <!-- 步骤5：分析结果 -->
+            <div id="step-5" class="step-content hidden">
+                <h2 class="text-3xl font-bold mb-6 text-gray-800">5. 分析结果</h2>
+                <p class="text-gray-600 mb-8">根据您提供的信息，我们进行了综合理性分析：</p>
+                
+                <div id="result-container" class="mb-10 min-h-[400px]">
+                    <!-- 分析结果将在这里动态生成 -->
+                </div>
+            
+                <div class="bg-blue-50 border border-blue-200 p-6 rounded-2xl mb-8">
+                    <h3 class="font-semibold text-blue-800 mb-3">重要提醒</h3>
+                    <ul class="list-disc pl-5 space-y-2 text-blue-700">
+                        <li>本工具仅供参考，不能完全代表真实情况。</li>
+                        <li>人是复杂的，最终判断请结合实际接触。</li>
+                        <li>如果对方有暴力、成瘾、犯罪记录等严重问题，请优先保护自己。</li>
+                    </ul>
+                </div>
+            
+                <div class="flex gap-4">
+                    <button onclick="showStep(4)" class="btn-secondary flex-1 py-4">← 返回修改</button>
+                    <button onclick="resetAll()" class="btn-primary flex-1 py-4">开始新的分析</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    	<div id="toast-container" class="fixed top-6 right-6 hidden z-50">
+    		<div id="toast" class="bg-red-500 text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center">
+    			<i class="fa fa-exclamation-circle mr-3"></i>
+    			<span id="toast-message"></span>
+    		</div>
+    	</div>
+    
+    	<script>
+    		// ====================== 完整修复后的JavaScript ======================
+    		let currentStep = 1;
+    
+    		function updateProgress() {
+    			const progress = ((currentStep - 1) / 4) * 100;
+    			document.getElementById('progress-bar').style.width = `${progress}%`;
+    		}
+    
+    		function showStep(n) {
+    			document.querySelectorAll('.step-content').forEach(el => el.classList.add('hidden'));
+    			const target = document.getElementById(`step-${n}`);
+    			if (target) target.classList.remove('hidden');
+    
+    			document.querySelectorAll('[id^="step-"][id$="-circle"]').forEach((c, i) => {
+    				const num = i + 1;
+    				c.classList.remove('step-active', 'step-completed', 'step-pending');
+    				if (num < n) c.classList.add('step-completed');
+    				else if (num === n) c.classList.add('step-active');
+    				else c.classList.add('step-pending');
+    			});
+    			currentStep = n;
+    			updateProgress();
+    		}
+    
+    		function showToast(msg) {
+    			const container = document.getElementById('toast-container');
+    			document.getElementById('toast-message').textContent = msg;
+    			container.classList.remove('hidden');
+    			setTimeout(() => container.classList.add('hidden'), 2800);
+    		}
+    
+    		// ====================== 最终版 validateStep（支持 select + input + radio） ======================
+    		function validateStep(step) {
+    		    const required = {
+    		        1: ['age', 'education', 'occupation', 'family_background'],
+    		        2: ['emotional_stability', 'communication', 'cognitive_ability'],
+    		        3: ['money_view', 'relationship_attitude', 'love_history', 'life_habit'],
+    		        4: ['relationship_role', 'attitude_towards', 'social_circle', 'future_planning', 'relationship_progress']
+    		    }[step] || [];
+    		
+    		    for (let field of required) {
+    		        let isValid = false;
+    		
+    		        // 处理 select 和 text/number input
+    		        const selectOrInput = document.getElementById(field);
+    		        if (selectOrInput) {
+    		            isValid = selectOrInput.value.trim() !== '';
+    		        } 
+    		        // 处理 radio 单选
+    		        else {
+    		            const checkedRadio = document.querySelector(`input[name="${field}"]:checked`);
+    		            isValid = !!checkedRadio;
+    		        }
+    		
+    		        if (!isValid) {
+    		            showToast(`请完成【${getFieldChineseName(field)}】这项必填内容～`);
+    		            // 高亮提示
+    		            const group = document.getElementById(`group-${field}`);
+    		            if (group) group.classList.add('border-red-500', 'border-2', 'p-4', 'rounded-2xl');
+    		            return false;
+    		        }
+    		    }
+    		    return true;
+    		}
+    		
+    		function getFieldChineseName(field) {
+    		    const names = {
+    		        age: "年龄段",
+    		        education: "教育背景",
+    		        occupation: "职业",
+    		        family_background: "家庭背景",
+    		        emotional_stability: "情绪稳定性",
+    		        communication: "沟通方式",
+    		        cognitive_ability: "认知能力与学习意愿",
+    		        money_view: "金钱观",
+    		        relationship_attitude: "对感情和婚姻的态度",
+    		        love_history: "恋爱史",
+    		        life_habit: "生活习惯",
+    		        relationship_role: "在关系中的角色定位",
+    		        attitude_towards: "她对你的态度",
+    		        social_circle: "她的社交圈",
+    		        future_planning: "她对未来的规划",
+    		        relationship_progress: "你们之间的关系进展"
+    		    };
+    		    return names[field] || field;
+    		}
+    
+    		function nextStep(from) {
+    			if (validateStep(from))
+				{
+					showStep(from + 1);
+				}else{
+					console.info("so:" + from)
+				}
+    		}
+			// ====================== 专门处理从步骤4进入结果 ======================
+			function goToResult() {
+				if (validateStep(4)) {
+					analyzeResults();   // 执行分析逻辑
+					// showStep(5) 已经在 analyzeResults() 里调用了
+				}
+			}
+    		// 选项卡点击事件（一次性绑定）
+    		function initOptionCards() {
+    			document.querySelectorAll('.option-card').forEach(card => {
+    				card.addEventListener('click', function() {
+    					const input = this.querySelector('input');
+    					if (!input) return;
+    					if (input.type === 'radio') {
+    						document.querySelectorAll(`input[name="${input.name}"]`).forEach(r => {
+    							r.closest('.option-card').classList.remove('option-card-selected');
+    						});
+    						this.classList.add('option-card-selected');
+    						input.checked = true;
+    					} else if (input.type === 'checkbox') {
+    						input.checked = !input.checked;
+    						this.classList.toggle('option-card-selected', input.checked);
+    					}
+    				});
+    			});
+    		}
+    
+    		// 颜值滑块
+    		function initSlider() {
+    			const slider = document.getElementById('appearance');
+    			if (slider) {
+    				slider.addEventListener('input', () => {
+    					document.getElementById('appearance-value').textContent = slider.value;
+    				});
+    			}
+    		}
+			
+			// ====================== 完整分析结果函数（最终版） ======================
+			function analyzeResults() {
+				// 收集所有表单数据
+				const data = {
+					age: document.getElementById('age').value,
+					education: document.getElementById('education').value,
+					occupation: document.getElementById('occupation').value,
+					income: document.getElementById('income').value,
+					familyBackground: document.querySelector('input[name="family_background"]:checked')?.value || '',
+					appearance: parseInt(document.getElementById('appearance')?.value) || 5,
+
+					emotionalStability: document.querySelector('input[name="emotional_stability"]:checked')?.value || '',
+					communication: document.querySelector('input[name="communication"]:checked')?.value || '',
+					cognitiveAbility: document.querySelector('input[name="cognitive_ability"]:checked')?.value || '',
+					specialBehaviors: Array.from(document.querySelectorAll('input[name="special_behavior"]:checked')).map(i => i.value),
+
+					moneyView: document.querySelector('input[name="money_view"]:checked')?.value || '',
+					relationshipAttitude: document.querySelector('input[name="relationship_attitude"]:checked')?.value || '',
+					loveHistory: document.querySelector('input[name="love_history"]:checked')?.value || '',
+					specialSituations: Array.from(document.querySelectorAll('input[name="special_situation"]:checked')).map(i => i.value),
+					lifeHabit: document.querySelector('input[name="life_habit"]:checked')?.value || '',
+
+					relationshipRole: document.querySelector('input[name="relationship_role"]:checked')?.value || '',
+					attitudeTowards: document.querySelector('input[name="attitude_towards"]:checked')?.value || '',
+					socialCircle: document.querySelector('input[name="social_circle"]:checked')?.value || '',
+					futurePlanning: document.querySelector('input[name="future_planning"]:checked')?.value || '',
+					relationshipProgress: document.querySelector('input[name="relationship_progress"]:checked')?.value || ''
+				};
+
+				// 初始化结果对象
+				let result = {
+					level1: '待定',
+					level2: '需要更多信息',
+					score: 30,
+					color: 'neutral',
+					reasons: [],
+					suggestions: []
+				};
+
+				// ==================== 核心判断逻辑（按弃 > 妾 > 妻 优先级） ====================
+				const isHighRisk = 
+					data.occupation === 'hostess' || 
+					data.occupation === 'internet_celebrity' ||
+					data.socialCircle === 'social_male' ||
+					data.relationshipProgress === 'progress_physical' ||
+					data.specialSituations.includes('cheating_past') ||
+					data.specialSituations.includes('multiple_relationship') ||
+					data.specialBehaviors.includes('addiction_drug') ||
+					data.specialBehaviors.includes('criminal_record') ||
+					data.emotionalStability === 'emotion_violent';
+
+				if (isHighRisk) {
+					result.level1 = '弃';
+					result.score = -95;
+					result.color = 'danger';
+
+					if (data.specialBehaviors.includes('addiction_drug') || 
+						data.specialBehaviors.includes('criminal_record') || 
+						data.emotionalStability === 'emotion_violent') {
+						result.level2 = '恶女';
+						result.reasons.push('存在严重安全风险（暴力、毒品、犯罪记录等）');
+					} else if (data.occupation === 'hostess' || data.occupation === 'internet_celebrity' || data.socialCircle === 'social_male') {
+						result.level2 = '风尘女';
+						result.reasons.push('职业或社交圈属于高风险风尘类型，忠诚度低');
+					} else if (data.specialSituations.includes('cheating_past') || data.specialSituations.includes('multiple_relationship')) {
+						result.level2 = '过墙女';
+						result.reasons.push('有出轨或多角恋历史，再犯风险较高');
+					} else {
+						result.level2 = '高风险型';
+					}
+
+					result.suggestions = [
+						'老板，强烈建议立即放弃，不要继续投入感情和资源。',
+						'这类对象大概率会给您带来长期的情感消耗和经济损失。',
+						'保护好自己，世界上值得您珍惜的人还有很多。'
+					];
+				} 
+				else if (data.relationshipRole === 'role_exploitative' || 
+						 data.attitudeTowards === 'attitude_selfish' || 
+						 data.moneyView === 'money_materialistic') {
+					result.level1 = '妾';
+					result.score = 45;
+					result.color = 'warning';
+					result.level2 = '物质型 / 悍妾';
+					result.reasons.push('关系中存在较强的利用或强势特征');
+					result.suggestions = [
+						'可以短期相处，但不建议作为结婚对象。',
+						'需谨慎评估长期共同生活的可能性。'
+					];
+				} 
+				else {
+					result.level1 = '妻';
+					result.score = 88;
+					result.color = 'success';
+					result.level2 = '良配 / 贤妻型';
+					result.reasons.push('目前未发现明显高风险特征，整体条件相对稳定');
+					result.suggestions = [
+						'恭喜老板，这属于值得认真发展的类型。',
+						'建议继续深入了解对方的价值观和生活习惯。',
+						'保持理性，同时也要用心经营关系。'
+					];
+				}
+
+				// ====================== 渲染结果 ======================
+				const container = document.getElementById('result-container');
+				
+				let html = `
+					<div class="result-card bg-white border-l-8 border-${result.color}-500 p-8 rounded-3xl shadow-xl">
+						<div class="flex items-center gap-5 mb-6">
+							<span class="text-6xl">
+								${result.level1 === '弃' ? '❌' : result.level1 === '妾' ? '🌸' : '💍'}
+							</span>
+							<div>
+								<span class="inline-block px-6 py-2 text-xl font-bold rounded-3xl bg-${result.color}-100 text-${result.color}-700">
+									${result.level1} 类 · ${result.level2}
+								</span>
+								<div class="text-5xl font-bold mt-3 text-gray-800">${result.score} 分</div>
+							</div>
+						</div>
+
+						<div class="mb-8">
+							<h4 class="font-semibold text-lg mb-3">判断依据</h4>
+							<ul class="list-disc pl-6 space-y-2 text-gray-700">
+								${result.reasons.map(r => `<li>${r}</li>`).join('')}
+							</ul>
+						</div>
+
+						<div>
+							<h4 class="font-semibold text-lg mb-3">小可爱给老板的建议</h4>
+							<ul class="space-y-3">
+								${result.suggestions.map(s => `
+									<li class="flex items-start gap-3">
+										<i class="fa fa-check-circle mt-1.5 text-${result.color}-500"></i>
+										<span class="text-gray-700">${s}</span>
+									</li>
+								`).join('')}
+							</ul>
+						</div>
+					</div>
+				`;
+				container.innerHTML = html;
+				showStep(5);
+			}
+
+			// 重置整个表单
+			function resetAll() {
+				if (confirm('确定要清空所有数据重新开始吗？')) {
+					location.reload();
+				}
+			}
+
+			// 暴露给HTML按钮调用
+			window.analyzeResults = analyzeResults;
+			window.resetAll = resetAll;
+    
+    		// 辅助判断函数（完整实现，按您笔记）
+    		function isDiscard(d) {
+    			return d.occupation === 'hostess' || d.occupation === 'internet_celebrity' || d.socialCircle === 'social_male' ||
+    				d.relationshipProgress === 'progress_physical' || d.specialSituations?.includes('cheating_past') || d
+    				.specialBehaviors?.includes('criminal_record') || d.emotionalStability === 'emotion_violent';
+    		}
+    
+    		function isEvil(d) {
+    			return d.specialBehaviors?.includes('addiction_drug') || d.specialBehaviors?.includes('mental_issue') || d
+    				.emotionalStability === 'emotion_violent';
+    		}
+    
+    		function isFlirtatious(d) {
+    			return d.occupation === 'hostess' || d.occupation === 'internet_celebrity' || d.lifeHabit === 'life_party';
+    		}
+    
+    		function isUnfaithful(d) {
+    			return d.specialSituations?.includes('cheating_past') || d.specialSituations?.includes('multiple_relationship');
+    		}
+    
+    		function isConcubine(d) {
+    			return d.relationshipRole === 'role_dependent' || d.appearance >= 8 || d.relationshipRole === 'role_dominant';
+    		}
+    
+    		function isDelicate(d) {
+    			return d.relationshipRole === 'role_dependent';
+    		}
+    
+    		function isBeautiful(d) {
+    			return d.appearance >= 8;
+    		}
+    
+    		function isWife(d) {
+    			return d.education === 'bachelor' || d.education === 'master' || d.familyBackground === 'family_complete';
+    		}
+    
+    		// 初始化
+    		document.addEventListener('DOMContentLoaded', () => {
+    			initOptionCards();
+    			initSlider();
+    			showStep(1);
+    			console.log('%c✅ 完整版工具已启动，老板请尽情使用！', 'color:#3b82f6;font-size:18px;font-weight:bold');
+    		});
+    
+    		// 暴露给按钮使用
+    		window.showStep = showStep;
+    		window.nextStep = nextStep;
+    		window.analyzeResults = analyzeResults;
+    		window.resetAll = () => {
+    			location.reload();
+    		};
+    	</script>
 </body>
 </html>

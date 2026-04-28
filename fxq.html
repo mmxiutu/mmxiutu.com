@@ -8,463 +8,261 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
   font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  background: linear-gradient(135deg, #1a0a2e 0%, #2d1b4e 30%, #1a0a2e 70%, #2d1b4e 100%);
+  background: linear-gradient(135deg, #1a0a2e 0%, #2d1b4e 100%);
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: 12px;
   color: #fff;
+  overflow-x: hidden;
 }
+
 .game-container {
-  max-width: 920px;
   width: 100%;
+  max-width: 920px;
   background: rgba(255,255,255,0.06);
   backdrop-filter: blur(20px);
   border-radius: 32px;
-  padding: 28px 24px 32px;
-  border: 1px solid rgba(255,255,255,0.10);
+  padding: 24px 20px 32px;
+  border: 1px solid rgba(255,255,255,0.12);
   box-shadow: 0 20px 60px rgba(0,0,0,0.6);
 }
+
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 18px;
-  padding: 0 6px;
+  margin-bottom: 20px;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
 }
 .header h1 {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 700;
   background: linear-gradient(90deg, #f472b6, #fb923c);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-.header .round-display {
-  font-size: 14px;
-  color: rgba(255,255,255,0.5);
-}
-.mode-selector {
-  display: flex;
-  gap: 8px;
-}
+
+.mode-selector { display: flex; gap: 8px; }
 .mode-btn {
   padding: 8px 20px;
   border-radius: 20px;
   border: 1px solid rgba(255,255,255,0.15);
   background: rgba(255,255,255,0.06);
-  color: rgba(255,255,255,0.5);
+  color: rgba(255,255,255,0.6);
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.25s;
-}
-.mode-btn:hover {
-  background: rgba(255,255,255,0.10);
-  color: #fff;
+  transition: all 0.3s;
 }
 .mode-btn.active {
   border-color: #f472b6;
-  background: rgba(244,114,182,0.20);
+  background: rgba(244,114,182,0.25);
   color: #f9a8d4;
-  box-shadow: 0 0 12px rgba(244,114,182,0.15);
+  box-shadow: 0 0 15px rgba(244,114,182,0.3);
 }
 
 /* Board */
-.board-wrapper {
-  position: relative;
-  margin: 0 auto 20px;
-  width: 100%;
-  max-width: 800px;
-}
+.board-wrapper { position: relative; margin: 0 auto 24px; width: 100%; max-width: 780px; }
 .board {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(7, 1fr);
   gap: 4px;
   aspect-ratio: 1/1;
+  background: rgba(0,0,0,0.2);
+  padding: 6px;
+  border-radius: 24px;
 }
 .cell {
-  border-radius: 10px;
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: clamp(10px, 2.1vw, 13.5px);
   text-align: center;
   padding: 4px;
   position: relative;
-  aspect-ratio: 1/1;
-  transition: all 0.25s ease;
-  cursor: default;
-  color: rgba(255,255,255,0.9);
-  border: 2px solid transparent;
-  line-height: 1.2;
+  transition: all 0.3s ease;
+  color: rgba(255,255,255,0.92);
 }
-.cell .icon { font-size: 28px; margin-bottom: 2px; }
-.cell .label { font-size: 11px; opacity: 0.9; line-height: 1.2; font-weight: 500; }
+.cell .icon { font-size: clamp(22px, 5.2vw, 32px); margin-bottom: 3px; }
+.cell .label { font-size: clamp(9px, 1.8vw, 11px); line-height: 1.25; opacity: 0.95; }
 
-/* Special cells */
-.cell.start {
-  background: linear-gradient(135deg, #f472b6, #ec4899);
-  border-color: #f9a8d4;
-  box-shadow: 0 0 12px rgba(244,114,182,0.4);
-}
-.cell.end {
-  background: linear-gradient(135deg, #fbbf24, #f59e0b);
-  border-color: #fde68a;
-  box-shadow: 0 0 12px rgba(251,191,36,0.4);
-}
+.cell.start { background: linear-gradient(135deg, #f472b6, #ec4899); box-shadow: 0 0 15px rgba(244,114,182,0.5); }
+.cell.end { background: linear-gradient(135deg, #fbbf24, #f59e0b); box-shadow: 0 0 15px rgba(251,191,36,0.5); }
 
-/* Task categories */
-.cat-sweet { background: rgba(244,114,182,0.25); border-color: rgba(244,114,182,0.4); }
-.cat-spicy { background: rgba(251,146,60,0.25); border-color: rgba(251,146,60,0.4); }
-.cat-hot   { background: rgba(239,68,68,0.25); border-color: rgba(239,68,68,0.4); }
-.cat-challenge { background: rgba(168,85,247,0.25); border-color: rgba(168,85,247,0.4); }
-.cat-romance { background: rgba(34,211,238,0.20); border-color: rgba(34,211,238,0.35); }
+.cat-sweet { background: rgba(244,114,182,0.22); border: 1px solid rgba(244,114,182,0.4); }
+.cat-spicy { background: rgba(251,146,60,0.22); border: 1px solid rgba(251,146,60,0.4); }
+.cat-hot   { background: rgba(239,68,68,0.22); border: 1px solid rgba(239,68,68,0.4); }
+.cat-challenge { background: rgba(168,85,247,0.22); border: 1px solid rgba(168,85,247,0.4); }
+.cat-romance { background: rgba(34,211,238,0.18); border: 1px solid rgba(34,211,238,0.35); }
 
-.cell.highlight {
-  transform: scale(1.08);
-  box-shadow: 0 0 20px rgba(255,255,255,0.3);
-  z-index: 2;
-}
-.cell .token {
+.cell.highlight { transform: scale(1.13); box-shadow: 0 0 28px rgba(255, 220, 100, 0.6); z-index: 10; }
+
+.token {
   position: absolute;
-  width: 18px;
-  height: 18px;
+  width: 22px; 
+  height: 22px;
   border-radius: 50%;
-  border: 2px solid #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-  z-index: 3;
-  display: none;
+  border: 3px solid #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  z-index: 20;
+  opacity: 0;
+  transition: all 0.65s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
 }
-.cell .token.active { display: block; }
-.token.p1 {
-  background: linear-gradient(135deg, #f472b6, #ec4899);
-  bottom: -4px; left: -4px; right: auto;
-}
-.token.p2 {
-  background: linear-gradient(135deg, #60a5fa, #3b82f6);
-  bottom: -4px; right: -4px; left: auto;
-}
+.token.p1 { background: linear-gradient(135deg, #f472b6, #ec4899); bottom: -4px; left: -4px; }
+.token.p2 { background: linear-gradient(135deg, #60a5fa, #3b82f6); bottom: -4px; right: -4px; }
+.token.active { opacity: 1; transform: scale(1.1); }
 
-/* Bottom area */
-.control-area {
-  display: flex;
-  gap: 16px;
-  align-items: stretch;
-  margin-top: 6px;
-}
+.control-area { display: flex; gap: 16px; align-items: stretch; }
 .player-panel {
   flex: 1;
-  background: rgba(255,255,255,0.06);
-  border-radius: 16px;
-  padding: 14px 16px;
-  border: 1px solid rgba(255,255,255,0.08);
-  text-align: center;
-}
-.player-panel.current {
-  border-color: rgba(244,114,182,0.5);
-  box-shadow: 0 0 16px rgba(244,114,182,0.15);
-}
-.player-panel .name {
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 4px;
-}
-.player-panel .name .emoji { margin-right: 6px; }
-.player-panel .pos {
-  font-size: 12px;
-  color: rgba(255,255,255,0.5);
-}
-.player-panel .finished-badge {
-  font-size: 11px;
-  color: #fbbf24;
-  margin-top: 2px;
-  display: none;
-}
-.player-panel .finished-badge.show { display: block; }
-
-.dice-area {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-width: 100px;
-}
-.dice {
-  width: 64px;
-  height: 64px;
-  background: rgba(255,255,255,0.10);
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 36px;
-  border: 2px solid rgba(255,255,255,0.15);
-  transition: all 0.15s;
-  margin-bottom: 8px;
-  user-select: none;
-}
-.dice.rolling {
-  animation: diceShake 0.12s infinite;
-}
-@keyframes diceShake {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(10deg); }
-  75% { transform: rotate(-10deg); }
-}
-.roll-btn {
-  padding: 10px 28px;
-  border-radius: 30px;
-  border: none;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s;
-  background: linear-gradient(135deg, #f472b6, #ec4899);
-  color: #fff;
-  box-shadow: 0 4px 16px rgba(244,114,182,0.35);
-  width: 100%;
-  white-space: nowrap;
-}
-.roll-btn:active { transform: scale(0.95); }
-.roll-btn:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-  transform: none;
-}
-
-/* Task display */
-.task-display {
-  margin-top: 18px;
-  padding: 18px 20px;
   background: rgba(255,255,255,0.07);
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,0.08);
-  min-height: 65px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border-radius: 18px;
+  padding: 16px 14px;
+  border: 1px solid rgba(255,255,255,0.1);
   text-align: center;
-  font-size: 17px;
-  line-height: 1.6;
   transition: all 0.3s;
 }
-.task-display.empty {
-  color: rgba(255,255,255,0.25);
-  font-size: 14px;
+.player-panel.current {
+  border-color: #f472b6;
+  box-shadow: 0 0 20px rgba(244,114,182,0.35);
+  animation: breathe 3s infinite ease-in-out;
 }
+@keyframes breathe { 0%,100% { box-shadow: 0 0 20px rgba(244,114,182,0.35); } 50% { box-shadow: 0 0 32px rgba(244,114,182,0.6); } }
 
-.reset-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.12);
-  color: rgba(255,255,255,0.5);
-  padding: 8px 16px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 12px;
-  transition: all 0.2s;
-  z-index: 99;
-}
-.reset-btn:hover {
+.dice-area { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 110px; }
+.dice {
+  width: 68px; height: 68px;
   background: rgba(255,255,255,0.12);
-  color: #fff;
-}
-
-@media (max-width: 600px) {
-  .game-container { padding: 16px 12px 20px; border-radius: 20px; }
-  .header h1 { font-size: 17px; }
-  .mode-btn { font-size: 11px; padding: 6px 14px; }
-  .board { gap: 3px; }
-  .cell { font-size: 11px; border-radius: 6px; padding: 2px; }
-  .cell .icon { font-size: 18px; }
-  .cell .label { font-size: 9px; }
-  .cell .token { width: 14px; height: 14px; }
-  .control-area { flex-direction: column; }
-  .dice-area { flex-direction: row; gap: 12px; min-width: auto; }
-  .dice { width: 52px; height: 52px; font-size: 28px; margin-bottom: 0; }
-  .roll-btn { width: auto; flex: 1; font-size: 13px; padding: 10px 16px; }
-  .task-display { font-size: 15px; min-height: 55px; padding: 14px 16px; }
-}
-
-/* ─── 访问控制遮罩 ─── */
-.auth-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 99999;
-  background: linear-gradient(135deg, #1a0a2e 0%, #2d1b4e 50%, #1a0a2e 100%);
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
-  font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-size: 42px;
+  border: 3px solid rgba(255,255,255,0.2);
+  margin-bottom: 10px;
+}
+.dice.rolling { animation: diceShake 0.14s infinite alternate; }
+@keyframes diceShake { from { transform: rotate(-12deg); } to { transform: rotate(12deg); } }
+
+.roll-btn {
+  padding: 12px 32px;
+  border: none;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #f472b6, #ec4899);
   color: #fff;
+  box-shadow: 0 6px 20px rgba(244,114,182,0.45);
+  cursor: pointer;
+}
+.roll-btn:active { transform: scale(0.96); }
+
+.task-display {
+  margin-top: 22px;
+  padding: 20px 22px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.12);
+  min-height: 78px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 16.5px;
+  line-height: 1.65;
+  animation: taskPop 0.45s ease forwards;
+}
+@keyframes taskPop { from { opacity: 0; transform: translateY(40px) scale(0.92); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+.reset-btn {
+  position: fixed; bottom: 20px; right: 20px;
+  background: rgba(255,255,255,0.09);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.6);
+  padding: 9px 18px;
+  border-radius: 22px;
+  font-size: 13px;
+  cursor: pointer;
+  z-index: 100;
+}
+
+@media (max-width: 680px) {
+  .game-container { padding: 18px 14px 24px; border-radius: 24px; }
+  .board { gap: 3px; padding: 4px; }
+  .control-area { flex-direction: column; gap: 14px; }
+  .dice-area { flex-direction: row; gap: 16px; align-items: center; }
+  .dice { width: 58px; height: 58px; font-size: 34px; }
+  .roll-btn { flex: 1; padding: 14px; font-size: 15px; }
+  .task-display { font-size: 15px; padding: 16px 18px; min-height: 68px; }
+}
+
+/* 加强移动端适配 */
+@media (max-width: 640px) {
+  .board {
+    gap: 2.5px;
+    padding: 5px;
+  }
+  .cell {
+    border-radius: 8px;
+    padding: 2px;
+  }
+  .cell .icon { 
+    font-size: clamp(18px, 4.8vw, 24px); 
+    margin-bottom: 1px; 
+  }
+  .cell .label { 
+    font-size: clamp(8.5px, 1.6vw, 10px); 
+    line-height: 1.15;
+  }
+  .token {
+    width: 17px;
+    height: 17px;
+  }
+  .control-area { gap: 12px; }
+  .dice { width: 56px; height: 56px; font-size: 32px; }
+}
+.auth-overlay {
+  position: fixed; inset: 0; z-index: 99999;
+  background: linear-gradient(135deg, #1a0a2e, #2d1b4e);
+  display: flex; align-items: center; justify-content: center;
 }
 .auth-overlay.hidden { display: none; }
 .auth-card {
-  background: rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.09);
   backdrop-filter: blur(20px);
-  border-radius: 24px;
-  padding: 40px 36px 36px;
-  border: 1px solid rgba(255,255,255,0.12);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  border-radius: 28px;
+  padding: 42px 34px 36px;
+  border: 1px solid rgba(255,255,255,0.15);
   text-align: center;
   max-width: 380px;
-  width: 90%;
-}
-.auth-card .icon { font-size: 56px; margin-bottom: 16px; }
-.auth-card h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
-.auth-card .sub { font-size: 13px; color: rgba(255,255,255,0.4); margin-bottom: 24px; }
-.auth-card input {
-  width: 100%;
-  padding: 14px 16px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.15);
-  background: rgba(255,255,255,0.06);
-  color: #fff;
-  font-size: 18px;
-  text-align: center;
-  letter-spacing: 8px;
-  outline: none;
-  transition: border-color 0.2s;
-  box-sizing: border-box;
-}
-.auth-card input:focus {
-  border-color: #f472b6;
-  box-shadow: 0 0 12px rgba(244,114,182,0.2);
-}
-.auth-card input::placeholder {
-  letter-spacing: 2px;
-  color: rgba(255,255,255,0.2);
-  font-size: 14px;
-}
-.auth-card .auth-btn {
-  margin-top: 16px;
-  width: 100%;
-  padding: 13px;
-  border-radius: 30px;
-  border: none;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  background: linear-gradient(135deg, #f472b6, #ec4899);
-  color: #fff;
-  box-shadow: 0 4px 16px rgba(244,114,182,0.3);
-  transition: all 0.2s;
-}
-.auth-card .auth-btn:active { transform: scale(0.97); }
-.auth-card .auth-hint {
-  margin-top: 12px;
-  font-size: 12px;
-  color: rgba(255,255,255,0.25);
-}
-.auth-block {
-  text-align: center;
-  padding: 40px 20px;
-}
-.auth-block .block-icon { font-size: 80px; margin-bottom: 20px; }
-.auth-block h2 { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
-.auth-block p { font-size: 14px; opacity: 0.5; }
-.auth-error {
-  color: #ef4444;
-  font-size: 13px;
-  margin-top: 10px;
-  display: none;
-}
-.auth-error.show { display: block; }
-@media (max-width: 600px) {
-  .auth-card { padding: 28px 20px 24px; }
-  .auth-card h2 { font-size: 19px; }
-  .auth-card input { font-size: 16px; letter-spacing: 6px; padding: 12px 14px; }
+  width: 92%;
 }
 </style>
 </head>
 <body>
 
-<!-- ─── 访问控制遮罩 ─── -->
+<!-- 授权遮罩 -->
 <div class="auth-overlay" id="authOverlay">
-  <div class="auth-card" id="authCard">
-    <div class="icon">💕</div>
-    <h2>情侣飞行棋</h2>
-    <div class="sub">请输入密码进入游戏</div>
-    <input type="password" id="passwordInput" placeholder="请输入密码" maxlength="10" autocomplete="off">
-    <div class="auth-error" id="authError">密码错误，请重试</div>
-    <button class="auth-btn" id="authBtn">🔓 进入游戏</button>
-    <div class="auth-hint">提示：4个字母</div>
+  <div class="auth-card">
+    <div style="font-size:58px;margin-bottom:18px;">💕</div>
+    <h2 style="font-size:23px;margin-bottom:8px;">情侣飞行棋</h2>
+    <p style="color:rgba(255,255,255,0.45);margin-bottom:24px;font-size:14px;">请输入密码进入我们的小世界</p>
+    <input type="password" id="passwordInput" placeholder="••••" maxlength="10" autocomplete="off"
+           style="width:100%;padding:16px;border-radius:16px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);color:#fff;text-align:center;font-size:19px;letter-spacing:10px;outline:none;">
+    <div id="authError" style="color:#f87171;margin-top:12px;font-size:13px;display:none;">密码错误，再试试看～</div>
+    <button id="authBtn" style="margin-top:20px;width:100%;padding:14px;border:none;border-radius:30px;background:linear-gradient(135deg,#f472b6,#ec4899);color:#fff;font-weight:700;font-size:16px;cursor:pointer;">🔓 进入游戏</button>
+    <div style="margin-top:14px;font-size:12.5px;color:rgba(255,255,255,0.3);">提示：4个字母</div>
   </div>
 </div>
 
-<script>
-// ═══════════════════════════════════════════════════════════════
-//  访问控制 — 手机拦截 + 密码验证
-//  密码: love  (固定4位)
-// ═══════════════════════════════════════════════════════════════
-(function() {
-  var overlay = document.getElementById('authOverlay');
-  var card = document.getElementById('authCard');
-
-  // 1️⃣ 手机设备拦截
-  var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobi|mobi|Phone|phone/i.test(navigator.userAgent);
-  if (isMobile) {
-    overlay.style.background = 'linear-gradient(135deg, #1a0a2e, #2d1b4e)';
-    card.innerHTML =
-      '<div class="auth-block">' +
-        '<div class="block-icon">📱</div>' +
-        '<h2>请在平板或电脑上打开</h2>' +
-        '<p>此游戏专为大屏设备设计</p>' +
-      '</div>';
-    return; // 阻塞，不继续
-  }
-
-  // 2️⃣ 检查是否已授权 (localStorage)
-  try {
-    if (localStorage.getItem('lovegame_auth') === 'true') {
-      overlay.classList.add('hidden');
-      return; // 已授权，放行
-    }
-  } catch(e) {}
-
-  // 3️⃣ 密码验证
-  var input = document.getElementById('passwordInput');
-  var btn = document.getElementById('authBtn');
-  var err = document.getElementById('authError');
-
-  function doAuth() {
-    var pwd = input.value.trim().toLowerCase();
-    if (pwd === 'love') {
-      try { localStorage.setItem('lovegame_auth', 'true'); } catch(e) {}
-      overlay.classList.add('hidden');
-    } else {
-      // 密码错误 → 清空DOM，显示"后会有期"
-      document.body.innerHTML =
-        '<div style="display:flex;align-items:center;justify-content:center;height:100vh;' +
-        'background:linear-gradient(135deg,#1a0a2e,#2d1b4e);color:#fff;' +
-        'font-family:\'PingFang SC\',\'Microsoft YaHei\',sans-serif;text-align:center;padding:20px;">' +
-          '<div>' +
-            '<div style="font-size:72px;margin-bottom:20px;">👋</div>' +
-            '<h1 style="font-size:28px;font-weight:700;margin-bottom:8px;">后会有期</h1>' +
-            '<p style="font-size:14px;opacity:0.35;">密码错误</p>' +
-          '</div>' +
-        '</div>';
-    }
-  }
-
-  btn.addEventListener('click', doAuth);
-  input.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') doAuth();
-  });
-  input.focus();
-})();
-</script>
-
-<div class="game-container">
+<div class="game-container" id="gameContainer" style="display:none;opacity:0;transition:opacity 0.9s ease;">
   <div class="header">
     <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
       <h1>💕 情侣飞行棋</h1>
@@ -473,7 +271,7 @@ body {
         <button class="mode-btn" data-mode="home">🏠 私密模式</button>
       </div>
     </div>
-    <span class="round-display">第 <span id="roundNum">0</span> 轮</span>
+    <span style="font-size:14px;color:rgba(255,255,255,0.55);">第 <span id="roundNum">1</span> 轮</span>
   </div>
 
   <div class="board-wrapper">
@@ -482,220 +280,181 @@ body {
 
   <div class="control-area">
     <div class="player-panel current" id="p1Panel">
-      <div class="name"><span class="emoji">💗</span>宝贝</div>
+      <div style="font-size:17px;font-weight:700;margin-bottom:4px;"><span style="margin-right:6px;">💗</span>宝贝</div>
       <div class="pos" id="p1Pos">📍 起点</div>
-      <div class="finished-badge" id="p1Finish">🏁 已到达！</div>
+      <div class="finished-badge" id="p1Finish" style="display:none;color:#fbbf24;margin-top:6px;font-size:13px;">🏁 已到达终点！</div>
     </div>
+
     <div class="dice-area">
       <div class="dice" id="dice">🎲</div>
-      <button class="roll-btn" id="rollBtn">🎲 掷骰子</button>
+      <button class="roll-btn" id="rollBtn">🎲 宝贝掷骰子</button>
     </div>
+
     <div class="player-panel" id="p2Panel">
-      <div class="name"><span class="emoji">💙</span>主人</div>
+      <div style="font-size:17px;font-weight:700;margin-bottom:4px;"><span style="margin-right:6px;">💙</span>主人</div>
       <div class="pos" id="p2Pos">📍 起点</div>
-      <div class="finished-badge" id="p2Finish">🏁 已到达！</div>
+      <div class="finished-badge" id="p2Finish" style="display:none;color:#fbbf24;margin-top:6px;font-size:13px;">🏁 已到达终点！</div>
     </div>
   </div>
 
   <div class="task-display empty" id="taskDisplay">
-    💕 选择模式，点击「掷骰子」开始游戏~
+    💕 选择模式，点击掷骰子开始我们的甜蜜游戏～
   </div>
 </div>
 
 <button class="reset-btn" id="resetBtn">🔄 重新开始</button>
 
 <script>
-// ═══════════════════════════════════════════════════════════════
-//  🎤 KTV 模式  —  喝酒 · 唱歌 · 暧昧挑逗
-//  场景：KTV包厢，灯光暧昧，有酒有歌，俩人在沙发上玩
-// ═══════════════════════════════════════════════════════════════
+// ====================== 优化后的 KTV 模式题库 (49条) ======================
 const KTV_DATA = [
-  // 0 起点
-  { cat: 'cat-sweet', icon: '💒', label: '起点\n干一杯开场！' },
-  // 1-6
-  { cat: 'cat-sweet', icon: '🍷', label: '喂对方\n喝一口酒' },
-  { cat: 'cat-spicy', icon: '🫦', label: '在耳边说\n一句悄悄话' },
-  { cat: 'cat-hot', icon: '💋', label: '含一口酒\n嘴对嘴喂过去' },
-  { cat: 'cat-challenge', icon: '🎤', label: '唱一句\n最撩的情歌\n看着对方' },
-  { cat: 'cat-romance', icon: '👀', label: '对视10秒\n不准笑\n然后亲下去' },
-  { cat: 'cat-spicy', icon: '🪑', label: '坐对方腿上\n喝完这杯酒' },
-  // 7-13
-  { cat: 'cat-hot', icon: '🧊', label: '把冰块含\n在嘴里吻上去\n递冰块' },
-  { cat: 'cat-challenge', icon: '🎯', label: '真心话：\n最想在KTV\n对我做什么' },
-  { cat: 'cat-sweet', icon: '🍒', label: '用嘴咬一颗\n樱桃喂给对方' },
-  { cat: 'cat-romance', icon: '🎵', label: '合唱一首\n情歌\n贴着脸唱' },
-  { cat: 'cat-spicy', icon: '👅', label: '用舌尖\n舔掉对方\n嘴角的酒滴' },
-  { cat: 'cat-hot', icon: '🔥', label: '在骰子声\n掩护下摸\n大腿根部' },
-  { cat: 'cat-romance', icon: '🥂', label: '喝交杯酒\n手臂挽着手\n臂喝完' },
-  // 14-20
-  { cat: 'cat-sweet', icon: '💆', label: '帮对方\n按摩肩膀\n30秒' },
-  { cat: 'cat-spicy', icon: '🧣', label: '用围巾/领带\n蒙住对方眼睛\n亲一下' },
-  { cat: 'cat-challenge', icon: '🎲', label: '划拳输的\n喝半杯\n并让对方亲' },
-  { cat: 'cat-hot', icon: '🫣', label: '手从衣摆\n伸进去\n抚摸腰线' },
-  { cat: 'cat-romance', icon: '✍️', label: '用手指蘸酒\n在对方锁骨\n写一个字' },
-  { cat: 'cat-sweet', icon: '🍫', label: '喂对方\n吃一颗糖/\n水果' },
-  { cat: 'cat-spicy', icon: '💭', label: '贴着耳朵\n说最想被\n怎么摸' },
-  // 21-27
-  { cat: 'cat-hot', icon: '🫦', label: '轻轻咬开\n对方衬衫\n一颗扣子' },
-  { cat: 'cat-challenge', icon: '🔄', label: '角色扮演：\n今晚是\n第一次见面' },
-  { cat: 'cat-romance', icon: '🌙', label: '说出一个\n只有我们\n俩的秘密' },
-  { cat: 'cat-sweet', icon: '🫂', label: '背后抱\n轻轻摇晃\n30秒' },
-  { cat: 'cat-hot', icon: '🌡️', label: '在脖子上\n种一颗\n草莓印' },
-  { cat: 'cat-spicy', icon: '🛋️', label: '躺对方\n腿上\n对方喂酒' },
-  { cat: 'cat-romance', icon: '💗', label: '问对方：\n"今晚想\n要我吗"低语' },
-  // 28-34
-  { cat: 'cat-challenge', icon: '🍻', label: '石头剪刀布\n输的连喝\n两杯' },
-  { cat: 'cat-sweet', icon: '🎀', label: '帮对方\n整理衣领\n趁机摸脖子' },
-  { cat: 'cat-hot', icon: '🥵', label: '解开自己\n领口\n让对方亲锁骨' },
-  { cat: 'cat-spicy', icon: '🫠', label: '含一口酒\n慢慢咽下\n让对方看着' },
-  { cat: 'cat-romance', icon: '🕯️', label: '形容今晚\n对方有多\n诱人' },
-  { cat: 'cat-challenge', icon: '🎪', label: '用身体\n写一个\n字母让对方猜' },
-  { cat: 'cat-sweet', icon: '🧸', label: '抱抱\n撒娇说\n"还要喝~"' },
-  // 35-41
-  { cat: 'cat-hot', icon: '🌶️', label: '手指蘸酒\n点在对方\n胸口舔掉' },
-  { cat: 'cat-spicy', icon: '🎗️', label: '解开对方\n一件饰品\n用嘴' },
-  { cat: 'cat-romance', icon: '💌', label: '凑到耳边\n说最撩的\n三个字' },
-  { cat: 'cat-challenge', icon: '🎤', label: '唱一句最\n想对对方\n唱的歌' },
-  { cat: 'cat-sweet', icon: '🍬', label: '含一颗糖\n喂给对方\n（糖吻）' },
-  { cat: 'cat-hot', icon: '💢', label: '手放在\n对方裤裆\n隔着布料摸' },
-  { cat: 'cat-spicy', icon: '👄', label: '嘴唇贴\n着脖子\n说话10秒' },
-  // 42-47
-  { cat: 'cat-romance', icon: '🌟', label: '此刻最想\n触碰对方\n哪个部位' },
-  { cat: 'cat-challenge', icon: '🧩', label: '给对方起\n一个今晚的\n秘密绰号' },
-  { cat: 'cat-sweet', icon: '🧣', label: '用外套\n把两人\n裹在一起' },
-  { cat: 'cat-hot', icon: '♨️', label: '手滑进\n对方裤子\n抚摸臀部' },
-  { cat: 'cat-spicy', icon: '🌊', label: '慢动作\n解开对方\n裤扣/裙扣' },
-  { cat: 'cat-romance', icon: '💕', label: '说一句\n"我想要你"\n看着眼睛' },
-  // 48 终点
-  { cat: 'cat-sweet', icon: '👑', label: '终点！！\n奖励：\n打车回家\n好好疼你💋' },
+  { cat: 'cat-sweet', icon: '💒', label: '起点\n干一杯，游戏正式开始！' },
+  { cat: 'cat-sweet', icon: '🍷', label: '喂对方喝一口酒，眼神不能移开' },
+  { cat: 'cat-spicy', icon: '🫦', label: '贴在对方耳边，用最撩的声音说一句情话' },
+  { cat: 'cat-hot', icon: '💋', label: '含一口酒，嘴对嘴慢慢喂给对方' },
+  { cat: 'cat-romance', icon: '👀', label: '深情对视15秒，然后深深一吻' },
+  { cat: 'cat-spicy', icon: '🪑', label: '坐到对方腿上，喝完这一杯' },
+  { cat: 'cat-hot', icon: '🧊', label: '用冰块接吻，把冰块传到对方嘴里' },
+  { cat: 'cat-challenge', icon: '🎤', label: '看着对方眼睛，唱一句最想对ta唱的情歌' },
+  { cat: 'cat-romance', icon: '🥂', label: '手臂交缠，喝一轮交杯酒' },
+  { cat: 'cat-spicy', icon: '👅', label: '用舌尖轻轻舔掉对方嘴角的酒滴' },
+  { cat: 'cat-hot', icon: '🔥', label: '手从对方衣服下摆伸进去，抚摸腰侧' },
+  { cat: 'cat-sweet', icon: '💆', label: '给对方按摩肩膀和后颈30秒' },
+  { cat: 'cat-spicy', icon: '🖐️', label: '用手轻轻捂住对方眼睛，亲一下' },
+  { cat: 'cat-hot', icon: '🫣', label: '手伸进对方上衣，轻轻抚摸胸口' },
+  { cat: 'cat-romance', icon: '❤️', label: '用手指蘸酒，在对方锁骨上画一个心形' },
+  { cat: 'cat-sweet', icon: '🍓', label: '用嘴喂对方一颗零食或水果' },
+  { cat: 'cat-spicy', icon: '💭', label: '贴着耳朵，说出你最想被对方怎么摸' },
+  { cat: 'cat-hot', icon: '🔪', label: '解开对方最上面一颗扣子或拉链' },
+  { cat: 'cat-challenge', icon: '🎯', label: '真心话：今晚最想对我做什么？' },
+  { cat: 'cat-romance', icon: '🌙', label: '分享一个只有我们俩知道的小秘密' },
+  { cat: 'cat-hot', icon: '🌡️', label: '在对方脖子上轻轻种一颗草莓印' },
+  { cat: 'cat-spicy', icon: '🛋️', label: '躺在对方腿上，让对方喂你喝酒' },
+  { cat: 'cat-romance', icon: '💗', label: '低声在对方耳边问：“今晚你想要我吗？”' },
+  { cat: 'cat-challenge', icon: '🍻', label: '石头剪刀布，输的人连喝两杯并被亲一下' },
+  { cat: 'cat-hot', icon: '🥵', label: '解开自己领口，让对方亲吻锁骨' },
+  { cat: 'cat-spicy', icon: '🫠', label: '含一口酒，慢慢咽下去，让对方全程看着' },
+  { cat: 'cat-romance', icon: '🔥', label: '用最性感的声音夸对方胸部 / 屁股 / 大腿' },
+  { cat: 'cat-hot', icon: '🌶️', label: '手指蘸酒，点在对方胸口，然后慢慢舔掉' },
+  { cat: 'cat-spicy', icon: '🎗️', label: '用嘴帮对方解开一件饰品' },
+  { cat: 'cat-romance', icon: '💌', label: '凑到耳边，说出最撩人的三个字' },
+  { cat: 'cat-hot', icon: '💢', label: '隔着裤子，轻轻抚摸对方敏感部位' },
+  { cat: 'cat-spicy', icon: '👄', label: '嘴唇贴着对方脖子，说话10秒不离开' },
+  { cat: 'cat-romance', icon: '🌟', label: '告诉对方，此刻最想触碰ta的哪个部位' },
+  { cat: 'cat-hot', icon: '♨️', label: '手滑进对方裤子，抚摸臀部' },
+  { cat: 'cat-spicy', icon: '🌊', label: '用慢动作解开对方裤扣或裙扣' },
+  { cat: 'cat-romance', icon: '💕', label: '盯着眼睛，认真地说“我现在很想要你”' },
+  { cat: 'cat-sweet', icon: '🫂', label: '把对方紧紧抱在怀里，感受体温' },
+  { cat: 'cat-challenge', icon: '🧩', label: '给对方起一个只属于今晚的秘密昵称' },
+  { cat: 'cat-hot', icon: '🔥', label: '把手放在对方大腿根部，轻轻揉捏' },
+  { cat: 'cat-romance', icon: '🎵', label: '脸贴着脸，一起唱一首情歌' },
+  { cat: 'cat-spicy', icon: '🫂', label: '从背后抱住对方，轻轻摇晃30秒' },
+  { cat: 'cat-hot', icon: '🥵', label: '让对方在你耳边发出喘息声' },
+  { cat: 'cat-challenge', icon: '🎪', label: '用身体在对方身上写一个字母，让ta猜' },
+  { cat: 'cat-romance', icon: '💗', label: '说一句只想在这个时刻对ta说的话' },
+  { cat: 'cat-sweet', icon: '🍬', label: '含着一颗糖，和对方来一个糖吻' },
+  { cat: 'cat-hot', icon: '💦', label: '隔着衣服，用身体轻轻磨蹭对方敏感处' },
+  { cat: 'cat-spicy', icon: '👅', label: '舌尖在对方耳垂慢慢打转' },
+  { cat: 'cat-romance', icon: '👑', label: '终点！今晚不回家了，就在这里把我办了💦' }
 ];
 
-// ═══════════════════════════════════════════════════════════════
-//  🏠 私密模式  —  卧室 · 一步步走向疯狂
-//  场景：家里，只有两个人，慢慢升温到欲火焚身
-// ═══════════════════════════════════════════════════════════════
+// ====================== 完善后的 私密模式题库 (严格49条) ======================
 const HOME_DATA = [
-  // 0 起点
-  { cat: 'cat-sweet', icon: '💒', label: '起点\n先亲一口\n热身~' },
-  // 1-6
-  { cat: 'cat-sweet', icon: '💋', label: '从额头\n亲到嘴唇\n慢慢来' },
-  { cat: 'cat-spicy', icon: '👂', label: '在耳边说\n最想我怎么\n抚摸你' },
-  { cat: 'cat-hot', icon: '👕', label: '脱掉对方\n一件上衣\n慢慢脱' },
-  { cat: 'cat-challenge', icon: '✋', label: '对方闭眼\n你用手指\n在他身上画路' },
-  { cat: 'cat-romance', icon: '👁️', label: '对视30秒\n不许移开\n然后深深吻' },
-  { cat: 'cat-hot', icon: '🫳', label: '手滑进\n对方衣服\n抚摸胸口' },
-  // 7-13
-  { cat: 'cat-spicy', icon: '🔄', label: '用舌尖\n在对方\n脖子上画圈' },
-  { cat: 'cat-challenge', icon: '🎭', label: '角色扮演：\n"我是你\n今晚的猎物"' },
-  { cat: 'cat-sweet', icon: '💆', label: '按摩对方\n后背\n从上往下' },
-  { cat: 'cat-romance', icon: '📍', label: '说出对方\n身上3个\n敏感点' },
-  { cat: 'cat-hot', icon: '🩲', label: '隔着内裤\n抚摸\n30秒' },
-  { cat: 'cat-spicy', icon: '🍓', label: '种3颗\n草莓印\n随便选位置' },
-  { cat: 'cat-romance', icon: '💭', label: '说出今晚\n最想对方\n对你做的事' },
-  // 14-20
-  { cat: 'cat-sweet', icon: '🫂', label: '全身拥抱\n1分钟\n不说话' },
-  { cat: 'cat-challenge', icon: '🎯', label: '让对方\n指挥你\n如何抚摸ta' },
-  { cat: 'cat-spicy', icon: '🦵', label: '用嘴唇\n蹭对方\n大腿内侧' },
-  { cat: 'cat-hot', icon: '👖', label: '脱掉对方\n裤子/裙子\n慢一点' },
-  { cat: 'cat-romance', icon: '🤫', label: '在耳边说\n最羞的\n一句话' },
-  { cat: 'cat-sweet', icon: '🫶', label: '亲吻对方\n手腕内侧\n感受脉搏' },
-  { cat: 'cat-spicy', icon: '🔗', label: '舔舐对方\n锁骨\n往下到胸口' },
-  // 21-27
-  { cat: 'cat-hot', icon: '🌊', label: '抚摸对方\n私密部位\n隔着内裤' },
-  { cat: 'cat-challenge', icon: '🔄', label: '一边接吻\n一边脱掉\n自己的上衣' },
-  { cat: 'cat-spicy', icon: '🤲', label: '用胸/胸膛\n蹭对方\n的手臂' },
-  { cat: 'cat-romance', icon: '💓', label: '把对方的手\n放在你胸口\n感受心跳' },
-  { cat: 'cat-hot', icon: '🫦', label: '解开对方\n所有扣子\n/拉链' },
-  { cat: 'cat-challenge', icon: '🎗️', label: '绑住对方\n双手\n1分钟' },
-  { cat: 'cat-romance', icon: '🌙', label: '看着对方\n说"你是\n我的"' },
-  // 28-34
-  { cat: 'cat-hot', icon: '🔥', label: '用手指\n划过对方\n肚脐以下' },
-  { cat: 'cat-sweet', icon: '💋', label: '亲吻对方\n后颈\n从发际线开始' },
-  { cat: 'cat-spicy', icon: '👅', label: '用舌头\n描绘对方\n嘴唇轮廓' },
-  { cat: 'cat-hot', icon: '🩲', label: '手伸进\n对方内裤\n慢慢抚摸' },
-  { cat: 'cat-romance', icon: '💕', label: '深吻+说我\n爱你\n手不安分' },
-  { cat: 'cat-challenge', icon: '🛌', label: '对方躺下\n你跪坐\n在ta身上对视' },
-  { cat: 'cat-sweet', icon: '🧸', label: '用被子\n把两人\n裹在一起' },
-  // 35-41
-  { cat: 'cat-spicy', icon: '🦵', label: '从膝盖\n一路亲\n到大腿根' },
-  { cat: 'cat-hot', icon: '👙', label: '脱掉\n全部上衣\n赤裸相对' },
-  { cat: 'cat-romance', icon: '👁️', label: '看着眼睛\n说"操我"\n用最温柔的声音' },
-  { cat: 'cat-challenge', icon: '🎪', label: '对方不动\n你来取悦\nta 1分钟' },
-  { cat: 'cat-sweet', icon: '💋', label: '奖励\n深深的\n舌吻' },
-  { cat: 'cat-hot', icon: '💦', label: '用身体\n蹭对方的\n勃起/湿润' },
-  { cat: 'cat-romance', icon: '🫂', label: '完全赤裸\n抱紧\n不进入 30秒' },
-  // 42-47
-  { cat: 'cat-spicy', icon: '🫣', label: '口交/手交\n30秒\n挑逗不释放' },
-  { cat: 'cat-challenge', icon: '🎲', label: '问对方：\n"最想被\n怎么操"回答' },
-  { cat: 'cat-sweet', icon: '💗', label: '亲吻全身\n每个\n角落' },
-  { cat: 'cat-hot', icon: '♨️', label: '69姿势\n保持\n1分钟' },
-  { cat: 'cat-spicy', icon: '🛌', label: '在门口\n徘徊\n问"准备好了？"' },
-  { cat: 'cat-romance', icon: '💕', label: '说"我要\n进去了"\n等对方点头' },
-  // 48 终点
-  { cat: 'cat-sweet', icon: '👑', label: '🎉 终点！！\n做爱吧！\n今晚尽情\n享受彼此 💦' },
+  { cat: 'cat-sweet', icon: '💒', label: '起点\n先来一个绵长又温柔的热吻' },
+  { cat: 'cat-sweet', icon: '💋', label: '从额头开始，慢慢亲吻到嘴唇' },
+  { cat: 'cat-spicy', icon: '👂', label: '在耳边低声说出你最想被怎么抚摸' },
+  { cat: 'cat-hot', icon: '👕', label: '慢慢脱掉对方一件上衣，边脱边亲吻' },
+  { cat: 'cat-romance', icon: '👁️', label: '对视30秒，然后给对方一个缠绵的法式深吻' },
+  { cat: 'cat-hot', icon: '🫳', label: '把手伸进对方衣服，轻轻抚摸胸口和乳头' },
+  { cat: 'cat-spicy', icon: '🔄', label: '用舌尖在对方脖子上画圈并轻轻吸吮' },
+  { cat: 'cat-challenge', icon: '🎭', label: '角色扮演：我是你今晚专属的听话小玩具' },
+  { cat: 'cat-sweet', icon: '💆', label: '给对方从肩膀到腰部做一次舒服的按摩' },
+  { cat: 'cat-romance', icon: '📍', label: '亲吻并说出对方身上你最爱的3个敏感点' },
+  { cat: 'cat-hot', icon: '🩲', label: '隔着内裤，缓慢而用力地抚摸对方' },
+  { cat: 'cat-spicy', icon: '🍓', label: '在对方脖子、胸口、大腿内侧各留下一颗草莓印' },
+  { cat: 'cat-romance', icon: '💭', label: '说出今晚你最想让对方对你做的一件事' },
+  { cat: 'cat-sweet', icon: '🫂', label: '全身紧紧拥抱1分钟，什么话都不说' },
+  { cat: 'cat-challenge', icon: '🎯', label: '闭上眼睛，让对方指挥你如何抚摸' },
+  { cat: 'cat-spicy', icon: '🦵', label: '用嘴唇从大腿内侧慢慢向上亲吻' },
+  { cat: 'cat-hot', icon: '👖', label: '用最慢最色气的方式脱掉对方裤子或裙子' },
+  { cat: 'cat-romance', icon: '🤫', label: '在对方耳边说出最羞耻的情话' },
+  { cat: 'cat-hot', icon: '🌊', label: '隔着内裤认真抚摸对方的私密部位' },
+  { cat: 'cat-challenge', icon: '🔄', label: '一边激烈接吻，一边脱掉自己的上衣' },
+  { cat: 'cat-romance', icon: '💓', label: '把对方的手放在你胸口，让ta感受你加速的心跳' },
+  { cat: 'cat-hot', icon: '🫦', label: '解开对方所有扣子，拉开所有拉链' },
+  { cat: 'cat-challenge', icon: '🎗️', label: '用丝巾或领带绑住对方双手，亲吻全身' },
+  { cat: 'cat-romance', icon: '🌙', label: '深情地看着对方说：“你是我的全部”' },
+  { cat: 'cat-hot', icon: '🔥', label: '手指从肚脐慢慢向下，划过最敏感的地带' },
+  { cat: 'cat-spicy', icon: '👅', label: '用舌头仔细描绘对方嘴唇和舌尖' },
+  { cat: 'cat-hot', icon: '🩲', label: '把手伸进对方内裤里面，缓慢而深入地抚摸' },
+  { cat: 'cat-romance', icon: '💕', label: '深吻的同时，在耳边反复说“我好爱你”' },
+  { cat: 'cat-challenge', icon: '🛌', label: '让对方躺下，你跪坐在ta身上深情对视' },
+  { cat: 'cat-sweet', icon: '🧸', label: '用被子把两人完全裹在一起亲密摩擦' },
+  { cat: 'cat-spicy', icon: '🦵', label: '从大腿内侧一路亲吻到最私密的地方' },
+  { cat: 'cat-hot', icon: '👙', label: '脱掉所有上衣，两人完全赤裸相对' },
+  { cat: 'cat-romance', icon: '👁️', label: '看着对方眼睛，用最温柔又色气的声音说“操我”' },
+  { cat: 'cat-challenge', icon: '🎪', label: '对方完全不动，你全力取悦ta 60秒' },
+  { cat: 'cat-hot', icon: '💦', label: '用身体正面慢慢磨蹭对方的勃起或湿润处' },
+  { cat: 'cat-romance', icon: '🫂', label: '完全赤裸紧紧抱住30秒，只感受体温和欲望' },
+  { cat: 'cat-spicy', icon: '🫣', label: '进行口交或手交，挑逗30秒不准释放' },
+  { cat: 'cat-challenge', icon: '🎲', label: '问对方：“你最想要我怎么激烈地操你？”' },
+  { cat: 'cat-sweet', icon: '💋', label: '从脖子一路亲吻到胸口，再到小腹' },
+  { cat: 'cat-hot', icon: '♨️', label: '69姿势，至少坚持1分钟' },
+  { cat: 'cat-romance', icon: '💕', label: '进入前，看着对方眼睛温柔又坚定地说“我要进去了”' },
+  { cat: 'cat-hot', icon: '🔥', label: '一边进入一边亲吻对方脖子和耳朵' },
+  { cat: 'cat-spicy', icon: '💦', label: '换成后入姿势，双手扶着对方腰' },
+  { cat: 'cat-hot', icon: '🥵', label: '加快节奏，让对方忍不住发出声音' },
+  { cat: 'cat-challenge', icon: '🛏️', label: '换到床边或沙发上，继续激烈做爱' },
+  { cat: 'cat-romance', icon: '💗', label: '一边做一边说“我爱你”，看着对方的眼睛' },
+  { cat: 'cat-hot', icon: '🌋', label: '尝试更深更激烈的撞击' },
+  { cat: 'cat-spicy', icon: '😈', label: '说些更色更脏的话刺激对方' },
+  { cat: 'cat-sweet', icon: '👑', label: '🎉 终点！今晚彻底放纵，把我操到腿软为止💦' }
 ];
 
-// ─── 1x7 蛇形布局 ───
 const LAYOUT = [
-  [ 0,  1,  2,  3,  4,  5,  6],
-  [13, 12, 11, 10,  9,  8,  7],
-  [14, 15, 16, 17, 18, 19, 20],
-  [27, 26, 25, 24, 23, 22, 21],
-  [28, 29, 30, 31, 32, 33, 34],
-  [41, 40, 39, 38, 37, 36, 35],
-  [42, 43, 44, 45, 46, 47, 48],
+  [0, 1, 2, 3, 4, 5, 6],
+  [13,12,11,10,9, 8, 7],
+  [14,15,16,17,18,19,20],
+  [27,26,25,24,23,22,21],
+  [28,29,30,31,32,33,34],
+  [41,40,39,38,37,36,35],
+  [42,43,44,45,46,47,48]
 ];
 
-const TOTAL_CELLS = 49; // 0~48
-
-// ─── 状态 ───
 let currentMode = 'ktv';
 let positions = [0, 0];
 let currentPlayer = 0;
 let round = 0;
 let rolling = false;
 let gameOver = false;
-let animating = false;
 let p1Finished = false;
 let p2Finished = false;
 
-function getData() {
-  return currentMode === 'ktv' ? KTV_DATA : HOME_DATA;
-}
+function getData() { return currentMode === 'ktv' ? KTV_DATA : HOME_DATA; }
 
-// ─── 渲染棋盘 ───
+// 渲染棋盘
 function renderBoard() {
   const board = document.getElementById('board');
   board.innerHTML = '';
   const data = getData();
+
   for (let row = 0; row < 7; row++) {
     for (let col = 0; col < 7; col++) {
       const idx = LAYOUT[row][col];
       const cell = document.createElement('div');
-      cell.className = 'cell';
-      cell.id = 'cell-' + idx;
+      cell.className = `cell ${idx === 0 ? 'start' : ''} ${idx === 48 ? 'end' : ''}`;
+      if (data[idx]) cell.classList.add(data[idx].cat);
 
-      if (idx === 0) {
-        cell.classList.add('start');
-      } else if (idx === TOTAL_CELLS - 1) {
-        cell.classList.add('end');
-      } else if (data[idx]) {
-        cell.classList.add(data[idx].cat);
+      if (data[idx]) {
+        cell.innerHTML = `<div class="icon">${data[idx].icon}</div><div class="label">${data[idx].label.replace(/\n/g, '<br>')}</div>`;
       }
 
-      const td = data[idx];
-      if (td) {
-        cell.innerHTML = `<div class="icon">${td.icon}</div><div class="label">${td.label.replace(/\n/g, '<br>')}</div>`;
-      }
-
+      // Token 只创建一次，且只在有棋子时添加 active
       const t1 = document.createElement('div');
       t1.className = 'token p1';
-      t1.id = 'token-p1';
       if (positions[0] === idx) t1.classList.add('active');
 
       const t2 = document.createElement('div');
       t2.className = 'token p2';
-      t2.id = 'token-p2';
       if (positions[1] === idx) t2.classList.add('active');
 
       cell.appendChild(t1);
@@ -705,244 +464,153 @@ function renderBoard() {
   }
 }
 
-// ─── 更新棋子 ───
 function updateTokens() {
-  document.querySelectorAll('.token').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.cell').forEach(c => c.classList.remove('highlight'));
+  document.getElementById(`cell-${positions[0]}`)?.classList.add('highlight');
+  document.getElementById(`cell-${positions[1]}`)?.classList.add('highlight');
 
-  const p1Token = document.querySelector(`#cell-${positions[0]} .token.p1`);
-  const p2Token = document.querySelector(`#cell-${positions[1]} .token.p2`);
-  if (p1Token) p1Token.classList.add('active');
-  if (p2Token) p2Token.classList.add('active');
-
-  const currentCell = document.getElementById(`cell-${positions[currentPlayer]}`);
-  if (currentCell) currentCell.classList.add('highlight');
-
-  const p1Pos = document.getElementById('p1Pos');
-  const p2Pos = document.getElementById('p2Pos');
-  const p1Fin = document.getElementById('p1Finish');
-  const p2Fin = document.getElementById('p2Finish');
-
-  if (p1Finished) { p1Pos.textContent = '🏁 到达！'; p1Fin.classList.add('show'); }
-  else if (positions[0] === 0) { p1Pos.textContent = '📍 起点'; p1Fin.classList.remove('show'); }
-  else { p1Pos.textContent = `📍 第 ${positions[0]} 格`; p1Fin.classList.remove('show'); }
-
-  if (p2Finished) { p2Pos.textContent = '🏁 到达！'; p2Fin.classList.add('show'); }
-  else if (positions[1] === 0) { p2Pos.textContent = '📍 起点'; p2Fin.classList.remove('show'); }
-  else { p2Pos.textContent = `📍 第 ${positions[1]} 格`; p2Fin.classList.remove('show'); }
+  // 更新位置文字
+  document.getElementById('p1Pos').textContent = p1Finished ? '🏁 到达！' : (positions[0] === 0 ? '📍 起点' : `📍 第 ${positions[0]} 格`);
+  document.getElementById('p2Pos').textContent = p2Finished ? '🏁 到达！' : (positions[1] === 0 ? '📍 起点' : `📍 第 ${positions[1]} 格`);
+  document.getElementById('p1Finish').style.display = p1Finished ? 'block' : 'none';
+  document.getElementById('p2Finish').style.display = p2Finished ? 'block' : 'none';
 }
 
-// ─── 面板 ───
-function updatePanels() {
-  const p1 = document.getElementById('p1Panel');
-  const p2 = document.getElementById('p2Panel');
-  const btn = document.getElementById('rollBtn');
-  p1.classList.toggle('current', currentPlayer === 0);
-  p2.classList.toggle('current', currentPlayer === 1);
+function showTask(idx) {
+  const display = document.getElementById('taskDisplay');
+  const data = getData();
+  const who = currentPlayer === 0 ? '💗 宝贝' : '💙 主人';
 
-  if (p1Finished && p2Finished) {
-    btn.textContent = '🎉 游戏结束！';
-    btn.disabled = true;
+  if (idx === 48) {
+    display.innerHTML = `<strong>🎉 ${who} 到达终点！</strong><br>今晚注定是一个美妙的不眠夜～`;
     return;
   }
-  if (gameOver) {
-    btn.textContent = '🎉 游戏结束';
-    btn.disabled = true;
-    return;
-  }
-  // Skip finished players
-  if (currentPlayer === 0 && p1Finished) { switchPlayer(); return; }
-  if (currentPlayer === 1 && p2Finished) { switchPlayer(); return; }
-
-  if (currentPlayer === 0) btn.textContent = '🎲 宝贝掷骰子';
-  else btn.textContent = '🎲 主人掷骰子';
-  btn.disabled = rolling || animating;
+  const td = data[idx];
+  display.innerHTML = `<strong>${who}</strong> → 第 ${idx} 格<br><span style="font-size:15.5px">${td.icon} ${td.label.replace(/\n/g, ' · ')}</span>`;
 }
 
-function switchPlayer() {
+function movePlayer(steps) {
+  const player = currentPlayer;
+  const oldPos = positions[player];
+  let newPos = Math.min(oldPos + steps, 48);
+
+  // 简单移动动画（实际位置更新）
+  positions[player] = newPos;
+  renderBoard();
+  updateTokens();
+  showTask(newPos);
+
+  if (newPos === 48) {
+    if (player === 0) p1Finished = true;
+    else p2Finished = true;
+
+    if (p1Finished && p2Finished) {
+      gameOver = true;
+      document.getElementById('taskDisplay').innerHTML = '🎉🎉 双方都到达终点！今晚尽情享受对方吧～🔥';
+      document.getElementById('rollBtn').disabled = true;
+    } else {
+      document.getElementById('taskDisplay').innerHTML += `<br><span style="font-size:13px;opacity:0.8">等待对方也到达～</span>`;
+    }
+  } else {
+    round++;
+    document.getElementById('roundNum').textContent = Math.floor(round / 2) + 1;
+  }
+
   currentPlayer = currentPlayer === 0 ? 1 : 0;
   updatePanels();
 }
 
-// ─── 显示任务 ───
-function showTask(idx) {
-  const display = document.getElementById('taskDisplay');
-  const data = getData();
-
-  if (idx === 0) {
-    display.className = 'task-display empty';
-    display.textContent = '💕 从起点出发吧~';
-    return;
-  }
-  if (idx === 48) {
-    display.className = 'task-display';
-    display.style.background = 'linear-gradient(135deg, rgba(251,191,36,0.15), rgba(244,114,182,0.15))';
-    display.style.borderColor = 'rgba(251,191,36,0.3)';
-    const modeLabel = currentMode === 'ktv' ? '回家好好疼你 💋' : '尽情享受彼此 💦';
-    display.innerHTML = `👑👑👑 恭喜到达终点！奖励：${modeLabel} 👑👑👑`;
-    return;
-  }
-
-  display.className = 'task-display';
-  display.style.background = '';
-  display.style.borderColor = '';
-  const td = data[idx];
-  const who = currentPlayer === 0 ? '💗 宝贝' : '💙 主人';
-  display.innerHTML = `<strong>${who}</strong> → 第 ${idx} 格<br><span style="font-size:15px;opacity:0.85">${td.icon} ${td.label.replace(/\n/g, ' · ')}</span>`;
-
-  const catLabels = {
-    'cat-sweet': '💋 甜蜜', 'cat-spicy': '🌶️ 暧昧',
-    'cat-hot': '🔥 火热', 'cat-challenge': '🎯 挑战', 'cat-romance': '💕 浪漫',
-  };
-  const cl = catLabels[td.cat] || '';
-  display.innerHTML += `<br><span style="font-size:11px;opacity:0.4">${cl}</span>`;
-}
-
-// ─── 掷骰子 ───
 function rollDice() {
-  if (rolling || animating || gameOver) return;
-  // Check if current player already finished
+  if (rolling || gameOver) return;
   if ((currentPlayer === 0 && p1Finished) || (currentPlayer === 1 && p2Finished)) {
-    switchPlayer();
+    currentPlayer = currentPlayer === 0 ? 1 : 0;
+    updatePanels();
     return;
   }
 
   rolling = true;
   const btn = document.getElementById('rollBtn');
-  const dice = document.getElementById('dice');
+  const diceEl = document.getElementById('dice');
   btn.disabled = true;
-  dice.classList.add('rolling');
+  diceEl.classList.add('rolling');
 
-  const faces = ['⚀','⚁','⚂','⚃','⚄','⚅'];
   let count = 0;
-  const maxCount = 10;
   const interval = setInterval(() => {
-    dice.textContent = faces[Math.floor(Math.random() * 6)];
+    diceEl.textContent = ['⚀','⚁','⚂','⚃','⚄','⚅'][Math.floor(Math.random()*6)];
     count++;
-    if (count >= maxCount) {
+    if (count >= 12) {
       clearInterval(interval);
-      // 原来是 * 6，现在改成 * 4，默认掷出 1~4
-      const result = Math.floor(Math.random() * 4) + 1;
-      dice.textContent = faces[result - 1];
-      dice.classList.remove('rolling');
+      diceEl.classList.remove('rolling');
+      const result = Math.floor(Math.random() * 4) + 1;   // 1~4步
+      diceEl.textContent = ['⚀','⚁','⚂','⚃','⚄','⚅'][result-1];
       rolling = false;
       movePlayer(result);
+      btn.disabled = false;
     }
-  }, 120);
+  }, 90);
 }
 
-// ─── 移动 ───
-function movePlayer(steps) {
-  animating = true;
-  const player = currentPlayer;
-  const oldPos = positions[player];
-  const newPos = Math.min(oldPos + steps, TOTAL_CELLS - 1);
-  positions[player] = newPos;
-
-  updateTokens();
-  showTask(newPos);
-
-  // Check finished
-  if (newPos === TOTAL_CELLS - 1) {
-    if (player === 0) p1Finished = true;
-    else p2Finished = true;
-
-    if (p1Finished && p2Finished) {
-      // Both finished!
-      gameOver = true;
-      document.getElementById('taskDisplay').innerHTML =
-        '🎉🎉🎉 双方都到达终点！今晚注定是一个不眠夜 🔥🎉🎉🎉';
-      document.getElementById('rollBtn').textContent = '🎉 完美通关！';
-      document.getElementById('rollBtn').disabled = true;
-      animating = false;
-      updatePanels();
-      return;
-    }
-
-    // One player finished
-    const winner = player === 0 ? '💗 宝贝' : '💙 主人';
-    document.getElementById('taskDisplay').innerHTML =
-      `🎉🎉 ${winner} 先到了！等对方也到就一起庆祝 🎉🎉<br><span style="font-size:13px;opacity:0.7">换另一个人掷骰子~</span>`;
-    animating = false;
-    switchPlayer();
-    return;
-  }
-
-  round++;
-  document.getElementById('roundNum').textContent = Math.floor(round / 2) + 1;
-  animating = false;
-  switchPlayer();
-}
-
-// ─── 切换模式 ───
 function switchMode(mode) {
   if (mode === currentMode) return;
   currentMode = mode;
-
-  // Update button active state
-  document.querySelectorAll('.mode-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.mode === mode);
-  });
-
-  // Reset game
-  positions = [0, 0];
-  currentPlayer = 0;
-  round = 0;
-  gameOver = false;
-  rolling = false;
-  animating = false;
-  p1Finished = false;
-  p2Finished = false;
-  document.getElementById('roundNum').textContent = '0';
-  document.getElementById('dice').textContent = '🎲';
-  const display = document.getElementById('taskDisplay');
-  display.className = 'task-display empty';
-  display.style.background = '';
-  display.style.borderColor = '';
-  const modeName = mode === 'ktv' ? '🎤 KTV模式' : '🏠 私密模式';
-  display.innerHTML = `🔄 已切换至 ${modeName}，点击「掷骰子」开始~`;
-  document.getElementById('p1Finish').classList.remove('show');
-  document.getElementById('p2Finish').classList.remove('show');
-
-  renderBoard();
-  updateTokens();
-  updatePanels();
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+  resetGame();
 }
 
-// ─── 重置 ───
 function resetGame() {
   positions = [0, 0];
   currentPlayer = 0;
   round = 0;
   gameOver = false;
-  rolling = false;
-  animating = false;
   p1Finished = false;
   p2Finished = false;
-  document.getElementById('roundNum').textContent = '0';
+  rolling = false;
+  document.getElementById('roundNum').textContent = '1';
   document.getElementById('dice').textContent = '🎲';
-  document.getElementById('p1Finish').classList.remove('show');
-  document.getElementById('p2Finish').classList.remove('show');
-  const display = document.getElementById('taskDisplay');
-  display.className = 'task-display empty';
-  display.innerHTML = '💕 已重置，点击「掷骰子」开始游戏~';
-  display.style.background = '';
-  display.style.borderColor = '';
+  document.getElementById('taskDisplay').innerHTML = '💕 已重置，点击掷骰子开始～';
+  document.getElementById('rollBtn').disabled = false;
   renderBoard();
   updateTokens();
   updatePanels();
 }
 
-// ─── 初始化 ───
+function updatePanels() {
+  document.getElementById('p1Panel').classList.toggle('current', currentPlayer === 0);
+  document.getElementById('p2Panel').classList.toggle('current', currentPlayer === 1);
+
+  const btn = document.getElementById('rollBtn');
+  btn.textContent = currentPlayer === 0 ? '🎲 宝贝掷骰子' : '🎲 主人掷骰子';
+}
+
+// 初始化
 document.getElementById('rollBtn').addEventListener('click', rollDice);
 document.getElementById('resetBtn').addEventListener('click', resetGame);
 document.querySelectorAll('.mode-btn').forEach(btn => {
   btn.addEventListener('click', () => switchMode(btn.dataset.mode));
 });
 
-renderBoard();
-updateTokens();
-updatePanels();
+document.getElementById('authBtn').addEventListener('click', () => {
+  const pwd = document.getElementById('passwordInput').value.trim().toLowerCase();
+  if (pwd === 'love') {
+    document.getElementById('authOverlay').classList.add('hidden');
+    const gameContainer = document.getElementById('gameContainer');
+    gameContainer.style.display = 'block';
+    setTimeout(() => { gameContainer.style.opacity = '1'; }, 30);
+    renderBoard();
+    updateTokens();
+    updatePanels();
+  } else {
+    const err = document.getElementById('authError');
+    err.style.display = 'block';
+    document.getElementById('passwordInput').value = '';
+  }
+});
+
+// 回车支持
+document.getElementById('passwordInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('authBtn').click();
+});
+
 </script>
 </body>
 </html>
